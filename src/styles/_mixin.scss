@@ -1,0 +1,41 @@
+/**
+* 溢出省略号
+* @param {Number} 行数
+*/
+@mixin ellipsis($rowCount: 1) {
+  @if $rowCount <=1 {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  } @else {
+    display: -webkit-box;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    -webkit-line-clamp: $rowCount;
+    -webkit-box-orient: vertical;
+  }
+}
+
+// 水平竖直方向居中-flex
+@mixin flex-center($w, $h) {
+  @include flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// 弹性盒
+@mixin flex {
+  display: flex;
+}
+
+// 尺寸
+@mixin size($w, $h) {
+  width: $w;
+  height: $h;
+}
+
+// 禁止文本被选择
+@mixin user-select {
+  user-select: none;
+}
