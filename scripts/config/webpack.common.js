@@ -3,9 +3,10 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const WebpackBar = require('webpackbar');
 const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 const CopyPlugin = require('copy-webpack-plugin');
+const path = require('path');
 const paths = require('../paths');
 const { isDevelopment, isProduction } = require('../env');
-const { imageInlineSizeLimit } = require('../conf');
+const { imageInlineSizeLimit, PROJECT_PATH } = require('../conf');
 
 const getCssLoaders = (importLoaders) => [
   isDevelopment ? 'style-loader' : MiniCssExtractPlugin.loader,
@@ -81,6 +82,13 @@ module.exports = {
           {
             loader: 'sass-loader',
             options: {
+              sourceMap: isDevelopment,
+            },
+          },
+          {
+            loader: 'sass-resources-loader',
+            options: {
+              resources: path.resolve(__dirname, '../../src/styles/index.scss'),
               sourceMap: isDevelopment,
             },
           },

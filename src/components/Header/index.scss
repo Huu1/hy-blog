@@ -1,3 +1,129 @@
 header {
-  background: lightgreen;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+
+  .nav-wrapper {
+    .menu {
+      li {
+        padding: 0.5rem;
+        color: $color-content-secondary;
+        cursor: pointer;
+
+        > a {
+          position: relative;
+          display: block;
+        }
+
+        &:hover {
+          color: $color-content-lead;
+        }
+      }
+
+      li + li {
+        margin-left: 1rem;
+      }
+
+      .checked {
+        color: $color-content-main;
+        font-weight: bold;
+
+        &::before {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 3px;
+          margin-top: -1.5rem;
+          margin-left: -0.6rem;
+          padding: 0 0.7rem;
+          background: $color-primary;
+          content: '';
+        }
+      }
+    }
+
+    .nav-meta {
+      li {
+        img {
+          @include size(25px, 25px);
+        }
+      }
+    }
+  }
+
+  .nav-mobile {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    display: none;
+    color: $color-content-secondary;
+    background-color: white;
+
+    i {
+      font-size: 1.3em;
+    }
+  }
+}
+
+.header-padding {
+  padding: 1rem $page-mobile-padding;
+}
+
+@media screen and (max-width: 640px) {
+  #header {
+    background-color: #222426;
+    transform: translateY(-100%);
+    transform: translateZ(0 0 0);
+
+    .nav-wrapper {
+      .menu {
+        flex-direction: column;
+
+        li {
+          margin-left: 2rem;
+          color: $color-content-secondary;
+        }
+
+        .checked {
+          span {
+            color: white;
+          }
+
+          &::before {
+            top: 50%;
+            left: 0;
+            width: 1.5rem;
+            height: 2px;
+            margin-top: -1px;
+            margin-left: -35px;
+            padding: 0;
+            border-radius: 2px;
+          }
+        }
+      }
+
+      .nav-meta {
+        display: none;
+      }
+    }
+
+    .nav-mobile {
+      display: flex;
+    }
+  }
+}
+
+.header-animation {
+  transform: translateY(0) !important;
+}
+
+.active-bgcolor {
+  background-color: #222426 !important;
+}
+
+.transition {
+  transition: all 0.3s ease-out;
 }

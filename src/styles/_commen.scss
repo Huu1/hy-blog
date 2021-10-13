@@ -1,0 +1,48 @@
+.pointer {
+  cursor: pointer;
+}
+
+.flex {
+  display: flex;
+}
+
+.row-center {
+  justify-content: center;
+}
+
+.column-center {
+  align-items: center;
+}
+
+.flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.mr-left-auto {
+  margin-left: auto;
+}
+
+.mr-right-auto {
+  margin-right: auto;
+}
+
+.mr-right {
+  margin-right: 0.8em;
+}
+
+.mr-left {
+  margin-left: 0.8em;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.page {
+  margin-top: 5em;
+}
