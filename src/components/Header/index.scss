@@ -3,6 +3,7 @@ header {
   top: 0;
   right: 0;
   left: 0;
+  z-index: 9;
 
   .nav-wrapper {
     .menu {
@@ -60,8 +61,7 @@ header {
     left: 0;
     display: none;
     color: $color-content-secondary;
-    background-color: white;
-
+    // background-color: white;
     i {
       font-size: 1.3em;
     }
