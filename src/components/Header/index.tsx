@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink } from 'react-router-dom';
+import PopupMask from '../Mask';
+import Search from '../Search';
 import './index.scss';
 
 const search = require('../../assets/search.svg');
@@ -18,6 +20,16 @@ function Header(props: IHeader) {
   } = props;
 
   const [menuActive, setMenuActive] = useState(false);
+  const [searchActive, setSearchActive] = useState(false);
+
+  const menuActiveChange = (value: boolean) => {
+    setMenuActive(value);
+  };
+
+  const searchActiveChange = () => {
+    setMenuActive(false);
+    setSearchActive(!searchActive);
+  };
 
   return (
     <header id='header' className={`header-padding transition ${menuActive ? 'header-animation' : ''}`}>
@@ -28,7 +40,7 @@ function Header(props: IHeader) {
               <li key={m.label}>
                 <NavLink
                   to={m.url}
-                  onClick={() => setMenuActive(false)}
+                  onClick={() => menuActiveChange(false)}
                   style={{ textDecoration: 'none', color: '#73777D' }}
                   activeClassName='checked'
                 >
@@ -45,17 +57,34 @@ function Header(props: IHeader) {
         </ul>
       </nav>
       <nav className={`nav-mobile header-padding transition flex column-center ${menuActive ? 'active-bgcolor' : ''}`}>
-        <div className='flex' onClick={() => setMenuActive(!menuActive)}>
+        <div className='flex' onClick={() => menuActiveChange(!menuActive)}>
           <div className='menu-button'>
             <i className='icon iconfont icon-caidan' />
           </div>
           <span className='inline-block mr-left'>Menu</span>
         </div>
 
-        <div className='pointer mr-left-auto '>
+        <div className='pointer mr-left-auto ' onClick={searchActiveChange}>
           <i className='icon iconfont icon-sousuo' />
         </div>
       </nav>
+      {menuActive && (
+        <PopupMask
+          onClickClose={() => {
+            menuActiveChange(false);
+          }}
+        />
+      )}
+      {searchActive && (
+        <PopupMask
+          style={{ zIndex: 10 }}
+          onClickClose={() => {
+            setSearchActive(false);
+          }}
+        >
+          <Search />
+        </PopupMask>
+      )}
     </header>
   );
 }

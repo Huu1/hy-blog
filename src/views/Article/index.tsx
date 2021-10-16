@@ -1,10 +1,11 @@
 import React from 'react';
+import ArticleContent from 'Src/components/ArticleContent';
 import './index.scss';
 
 function Article() {
   return (
-    <section className=''>
-      <div className='article-header'>
+    <section className='article-wrap'>
+      <div className='header'>
         <div className='inner'>
           <div className='article-info'>
             <span className='article-type'>Article - </span>
@@ -28,6 +29,17 @@ function Article() {
           </div>
         </div>
       </div>
+
+      <main className='content'>
+        <div className='inner'>
+          <div className='article-content'>
+            <ArticleContent />
+          </div>
+          <div className='article-footer'>foot</div>
+          <div className='article-comment'>comment</div>
+          <div className='article-nav'>nav</div>
+        </div>
+      </main>
     </section>
   );
 }

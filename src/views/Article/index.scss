@@ -1,6 +1,6 @@
-.article-header {
+.header {
   position: relative;
-  margin-bottom: calc(4rem + 2vw);
+  margin-bottom: calc(2rem + 2vw);
   padding: calc(8rem + 8vw) 0 calc(2rem + 6vw);
   overflow: hidden;
   color: white;
@@ -8,9 +8,7 @@
   background: black;
 
   .inner {
-    max-width: $page-inner-width;
-    margin: 0 auto;
-    padding: 0 8rem;
+    @include page-inner;
 
     .article-info {
       position: relative;
@@ -89,8 +87,26 @@
     }
   }
 }
+
+.content {
+  .inner {
+    @include page-inner;
+
+    .article-content {
+    }
+
+    .article-footer {
+    }
+
+    .article-comment {
+    }
+
+    .article-nav {
+    }
+  }
+}
 @media screen and (max-width: 640px) {
-  .article-header .inner {
+  .article-wrap .inner {
     padding: 0 $page-mobile-padding;
   }
 }

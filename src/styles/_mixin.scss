@@ -39,3 +39,10 @@
 @mixin user-select {
   user-select: none;
 }
+
+// 页面 padding
+@mixin page-inner {
+  max-width: $page-inner-width;
+  margin: 0 auto;
+  padding: 0 8rem;
+}

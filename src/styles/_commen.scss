@@ -46,3 +46,15 @@
 .page {
   margin-top: 5em;
 }
+
+.page-wrap {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-right: 0;
+}
+
+.overflow-y-hidden {
+  overflow: hidden;
+}
