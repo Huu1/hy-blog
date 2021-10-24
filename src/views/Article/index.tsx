@@ -1,8 +1,32 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { withRouter } from 'react-router';
 import ArticleContent from 'Src/components/ArticleContent';
+import request from 'Src/utils/request';
 import './index.scss';
 
-function Article() {
+function Article(props: any) {
+  const {
+    match: { params },
+  } = props;
+
+  const [article, setArticle] = useState();
+
+  const artilceList = useSelector((state: any) => state.article);
+
+  useEffect(() => {
+    if (params.id) {
+      const target = artilceList.find((i: any) => i.articleId === params.id);
+      if (target) {
+        setArticle(target);
+      } else {
+        request.get('');
+      }
+    }
+  }, [params.id, artilceList]);
+
+  console.log(article);
+
   return (
     <section className='article-wrap'>
       <div className='header'>
@@ -44,4 +68,4 @@ function Article() {
   );
 }
 
-export default Article;
+export default withRouter(Article);

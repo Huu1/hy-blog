@@ -28,6 +28,12 @@
       "Styles/*": [
         "src/styles/*"
       ],
+      "Views/*": [
+        "src/Views/*"
+      ],
+      "Store/*": [
+        "src/store/*"
+      ],
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

@@ -1,18 +1,28 @@
 import React from 'react';
+import dayjs from 'dayjs';
+import { withRouter } from 'react-router-dom';
+import relativeTime from 'dayjs/plugin/relativeTime';
 import './index.scss';
 
-function ArticleCard({ article }: any) {
+dayjs.extend(relativeTime);
+
+function ArticleCard({ article, history }: any) {
+  const viewArticle = () => {
+    history.push(`/article/${article.articleId}`);
+  };
   return (
-    <div className='article-wrap' key={article.id}>
+    <div className='article-wrap'>
       <div className='inner'>
         <div className='article'>
-          <h2 className='article-title'>{article.title}</h2>
-          <span className='article-meta'>{article.meta}</span>
-          <div className='article-excerpt'>{article.excerpt}</div>
+          <h2 className='article-title' onClick={viewArticle}>
+            {article.title}
+          </h2>
+          <span className='article-meta'>发布于{dayjs(article.createTime).fromNow()}</span>
+          <div className='article-excerpt'>{article.brief}</div>
         </div>
       </div>
     </div>
   );
 }
 
-export default ArticleCard;
+export default withRouter(ArticleCard);

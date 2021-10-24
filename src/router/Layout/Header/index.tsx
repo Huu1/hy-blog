@@ -1,24 +1,13 @@
 import React, { useState } from 'react';
-import { NavLink } from 'react-router-dom';
-import PopupMask from '../Mask';
-import Search from '../Search';
+import { NavLink, withRouter } from 'react-router-dom';
+import menuList from 'Src/config/menu';
+import PopupMask from '../../../components/Mask';
+import Search from '../../../components/Search';
 import './index.scss';
 
-const search = require('../../assets/search.svg');
+const search = require('../../../assets/search.svg');
 
-interface IHeader {
-  menus: any;
-}
-
-function Header(props: IHeader) {
-  const {
-    menus = [
-      { label: 'Home', url: '/home' },
-      { label: 'Author', url: '/author' },
-      { label: 'Test', url: '/Test' },
-    ],
-  } = props;
-
+function Header() {
   const [menuActive, setMenuActive] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
 
@@ -35,16 +24,16 @@ function Header(props: IHeader) {
     <header id='header' className={`header-padding transition ${menuActive ? 'header-animation' : ''}`}>
       <nav className='nav-wrapper flex justify-between column-center'>
         <ul className='menu flex'>
-          {menus.map((m: any) => {
+          {menuList.map((m: any) => {
             return (
-              <li key={m.label}>
+              <li key={m.title}>
                 <NavLink
-                  to={m.url}
+                  to={m.path}
                   onClick={() => menuActiveChange(false)}
                   style={{ textDecoration: 'none', color: '#73777D' }}
                   activeClassName='checked'
                 >
-                  <span>{m.label}</span>
+                  <span>{m.title}</span>
                 </NavLink>
               </li>
             );
@@ -57,7 +46,7 @@ function Header(props: IHeader) {
         </ul>
       </nav>
       <nav className={`nav-mobile header-padding transition flex column-center ${menuActive ? 'active-bgcolor' : ''}`}>
-        <div className='flex' onClick={() => menuActiveChange(!menuActive)}>
+        <div className='flex column-center' onClick={() => menuActiveChange(!menuActive)}>
           <div className='menu-button'>
             <i className='icon iconfont icon-caidan' />
           </div>
@@ -89,4 +78,4 @@ function Header(props: IHeader) {
   );
 }
 
-export default Header;
+export default withRouter(Header);
