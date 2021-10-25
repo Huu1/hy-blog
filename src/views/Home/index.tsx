@@ -1,49 +1,46 @@
-import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ArticleCard from 'Src/components/ArticleCard';
 import { uid } from 'Src/config/user';
-import { setArticle } from 'Src/store/feature/articleSlice';
+import { selectAllArticle, setArticle } from 'Src/store/feature/articleSlice';
+import { IArticle } from 'Src/utils/type';
 import { useRequest } from 'Src/utils/useHttp';
 
 import './index.scss';
 
-// const articleList = [
-//   {
-//     id: '1',
-//     title: 'react如何给选中的导航添加样式',
-//     meta: '发布于 react 前端',
-//     excerpt: '之所以你在浏览器内可以由首页跳转到其他路由地址，是因为这是由前端自行渲染的，你在React',
-//   },
-//   {
-//     id: '2',
-//     title: 'react如何给选中的导航添加样式',
-//     meta: '发布于 react 前端',
-//     excerpt: '之所以你在浏览器内可以由首页跳转到其他路由地址，是因为这是由前端自行渲染的，你在React',
-//   },
-//   {
-//     id: '3',
-//     title: 'react如何给选中的导航添加样式',
-//     meta: '发布于 react 前端',
-//     excerpt: '之所以你在浏览器内可以由首页跳转到其他路由地址，是因为这是由前端自行渲染的，你在React',
-//   },
-//   {
-//     id: '4',
-//     title: 'react如何给选中的导航添加样式',
-//     meta: '发布于 react 前端',
-//     excerpt: '之所以你在浏览器内可以由首页跳转到其他路由地址，是因为这是由前端自行渲染的，你在React',
-//   },
-// ];
+const getUrl = (current: number) => {
+  return `article/queryAllPublish?uid=${uid}&pageSize=1&current=${current}`;
+};
+
 function Home() {
   const dispatch = useDispatch();
+  const data = useSelector(selectAllArticle);
+  const [current, setCurrent] = useState(1);
 
-  const { state, setUrl } = useRequest(`article/queryAllPublish/${uid}`, {}, 'GET');
-  const { isLoading, isError, data } = state;
+  const { state, setUrl } = useRequest(getUrl(current), {}, 'GET');
+  const {
+    isLoading,
+    isError,
+    data: { list, total },
+  } = state;
 
   useEffect(() => {
-    if (data.list) {
-      dispatch(setArticle(data.list));
+    if (list) {
+      dispatch(setArticle(list));
     }
-  }, [data, dispatch]);
+  }, [list, dispatch]);
+
+  useEffect(() => {
+    setUrl(getUrl(current));
+  }, [current, setUrl]);
+
+  const getMore = () => {
+    setCurrent((c) => c + 1);
+  };
+
+  if (isLoading && !data) {
+    return <span>loading</span>;
+  }
 
   if (isError) {
     return <span>错误</span>;
@@ -51,9 +48,12 @@ function Home() {
 
   return (
     <div>
-      {data?.list?.map((article: any) => {
+      {data?.map((article: IArticle) => {
         return <ArticleCard key={article.articleId} article={article} />;
       })}
+      <div style={{ textAlign: 'center' }}>
+        {data && data.length === total ? '我是有底线的' : <span onClick={getMore}>获取更多</span>}
+      </div>
     </div>
   );
 }

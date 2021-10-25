@@ -1,17 +1,29 @@
-import { createSlice, nanoid } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
+import { IArticle } from 'Src/utils/type';
 
-const initialState: any[] = [];
+const initialState: {
+  data: IArticle[];
+} = {
+  data: [],
+};
 
-const postsSlice = createSlice({
-  name: 'posts',
+const articleSlice = createSlice({
+  name: 'article',
   initialState,
   reducers: {
     setArticle(state, action) {
-      state.push(...action.payload);
+      state.data.push(...action.payload);
     },
   },
 });
 
-export const { setArticle } = postsSlice.actions;
+export const { setArticle } = articleSlice.actions;
 
-export default postsSlice.reducer;
+export default articleSlice.reducer;
+
+// 取所有文章
+export const selectAllArticle = (state: any) => state.article.data;
+
+// 根据id取文章
+export const selectArticleById = (state: any, articleId: string): IArticle | null =>
+  state.article.data.find((a: IArticle) => a.articleId === articleId);
