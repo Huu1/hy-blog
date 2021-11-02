@@ -1,14 +1,17 @@
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+// import { useDispatch, useSelector } from 'react-redux';
+// import { selectAllArticle, selectArticleById, setArticle } from 'Src/store/feature/articleSlice';
 import { withRouter } from 'react-router';
 import ArticleContent from 'Src/components/ArticleContent';
-import { selectAllArticle, selectArticleById, setArticle } from 'Src/store/feature/articleSlice';
+import PageLoading from 'Src/components/pageLoading';
+import Tag from 'Src/components/Tag';
 import request from 'Src/utils/request';
 import { IArticle } from 'Src/utils/type';
 import './index.scss';
 
+dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);
 
 function ArticlePage(props: any) {
@@ -16,9 +19,9 @@ function ArticlePage(props: any) {
     match: { params },
   } = props;
 
-  const dispatch = useDispatch();
-
-  const article: IArticle | null = useSelector((state) => selectArticleById(state, params.id));
+  // const dispatch = useDispatch();
+  // const article: IArticle | null = useSelector((state) => selectArticleById(state, params.id));
+  const [article, setArticle] = useState<IArticle>();
 
   useEffect(() => {
     const fetch = async () => {
@@ -26,7 +29,7 @@ function ArticlePage(props: any) {
         const res: any = await request.get(`article/${params.id}`);
         const { code, data, msg } = res;
         if (code === 0) {
-          dispatch(setArticle([data]));
+          setArticle(data);
         } else {
           console.warn(msg);
         }
@@ -38,7 +41,7 @@ function ArticlePage(props: any) {
     if (!article) {
       fetch();
     }
-  }, [article, params.id, dispatch]);
+  }, [article, params.id]);
 
   // if (!article) {
   //   return (
@@ -48,22 +51,41 @@ function ArticlePage(props: any) {
   //   );
   // }
 
+  if (!article) {
+    return (
+      <div style={{ marginTop: '8em' }}>
+        <PageLoading />
+      </div>
+    );
+  }
+
   return (
     <section className='article-wrap'>
       <div className='header'>
         <div className='inner'>
           <div className='article-info'>
-            <span className='article-type'>Article - </span>
-            <span className='post-count'> Getting Start</span>
+            {article?.label?.map((i: any) => {
+              return (
+                <>
+                  <Tag style={{ color: 'white' }} value={i} key={i.id} />
+                  <div style={{ marginRight: '10px' }} />
+                </>
+              );
+            })}
           </div>
           <div className='article-title'>{article?.title}</div>
           <div className='article-meta'>
             <div className='article-meta-avatars'>
-              <img src={article?.background} alt='' />
+              <img src={article?.user?.avatar} alt='' />
             </div>
             <div className='article-meta-author flex-column'>
-              <span>Some Write</span>
-              <span className='time'>{dayjs(article?.createTime).fromNow()}</span>
+              <span>{article?.user?.username}</span>
+              <span className='time'>
+                {/* 发布于 &nbsp;·&nbsp; */}
+                {dayjs(article?.createTime).format('DD-MM-YYYY')}
+                &nbsp;·&nbsp;
+                <span className='time'>{`${article?.readTime}分钟`}</span>
+              </span>
             </div>
           </div>
           <div className='article-cover'>
@@ -75,7 +97,7 @@ function ArticlePage(props: any) {
       <main className='content'>
         <div className='inner'>
           <div className='article-content'>
-            <ArticleContent value={article?.content} />
+            <ArticleContent value={article?.content?.content} />
           </div>
           {/* <div className='article-nav'>nav</div> */}
         </div>

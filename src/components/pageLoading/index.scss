@@ -1,0 +1,54 @@
+.box {
+  text-align: center;
+}
+[class*='loader-'] {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  color: inherit;
+  vertical-align: middle;
+  pointer-events: none;
+}
+.loader-08 {
+  position: relative;
+}
+.loader-08:before,
+.loader-08:after {
+  content: '';
+  width: inherit;
+  height: inherit;
+  border-radius: 50%;
+  background-color: currentcolor;
+  opacity: 0.6;
+  position: absolute;
+  top: 0;
+  left: 0;
+  -webkit-animation: loader-08 2s infinite ease-in-out;
+  animation: loader-08 2s infinite ease-in-out;
+}
+.loader-08:after {
+  -webkit-animation-delay: -1s;
+  animation-delay: -1s;
+}
+@-webkit-keyframes loader-08 {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}
+@keyframes loader-08 {
+  0%,
+  100% {
+    -webkit-transform: scale(0);
+    transform: scale(0);
+  }
+  50% {
+    -webkit-transform: scale(1);
+    transform: scale(1);
+  }
+}

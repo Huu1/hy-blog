@@ -24,7 +24,7 @@ async function startServer() {
         return logger.start(resPort, SERVER_HOST);
       });
     }
-  } catch (error) {
+  } catch {
     console.log(chalk.red(error.message));
   }
 }

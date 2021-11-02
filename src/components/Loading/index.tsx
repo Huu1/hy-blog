@@ -14,7 +14,7 @@ const Loading = () => {
 
   return (
     <div className='app-container'>
-      <span>loading</span>
+      <span />
     </div>
   );
 };
