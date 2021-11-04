@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { NavLink, withRouter } from 'react-router-dom';
+import Modal from 'Src/components/Modal';
 import menuList from 'Src/config/menu';
 import PopupMask from '../../../components/Mask';
 import Search from '../../../components/Search';
@@ -65,14 +66,14 @@ function Header() {
         />
       )}
       {searchActive && (
-        <PopupMask
-          style={{ zIndex: 10 }}
-          onClickClose={() => {
+        <Modal
+          onCancleClick={() => {
             setSearchActive(false);
           }}
+          onCancleMask
         >
           <Search />
-        </PopupMask>
+        </Modal>
       )}
     </header>
   );

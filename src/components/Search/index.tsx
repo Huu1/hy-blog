@@ -4,7 +4,6 @@ import './index.scss';
 function Search() {
   return (
     <div className='search-wrap'>
-      <div className='close'>X</div>
       <div
         className='search-box'
         onClick={(e) => {
