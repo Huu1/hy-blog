@@ -5,6 +5,7 @@
 import axios from 'axios';
 
 axios.defaults.baseURL = 'http://1.116.75.166:3000';
+// axios.defaults.baseURL = 'http://localhost:3000';
 
 /**
  * 请求失败后的错误统一处理

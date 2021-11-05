@@ -105,6 +105,11 @@
     }
   }
 }
+
+.article-wrap hr {
+  margin: 3em 0;
+}
+
 @media screen and (max-width: 640px) {
   .article-wrap .inner {
     padding: 0 $page-mobile-padding;
