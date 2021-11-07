@@ -4,17 +4,19 @@
   padding: calc(8rem + 8vw) 0 calc(2rem + 6vw);
   overflow: hidden;
   color: white;
+  height: 10rem;
   // text-shadow: 0 1px 2px rgb(0 0 0.1);
-  background: black;
+  // background: black;
 
   .inner {
     @include page-inner;
-
+    justify-content: space-between;
+    height: 100%;
     .article-info {
       position: relative;
       z-index: 1;
       display: flex;
-      margin-bottom: 1em;
+      // margin-bottom: 1em;
       font-size: 1rem;
       line-height: 1em;
     }
@@ -22,10 +24,9 @@
     .article-title {
       position: relative;
       z-index: 1;
-      margin: 0 0 4rem;
-      font-weight: 700;
-      font-size: 3em;
-      line-height: 1.25em;
+      font-weight: 600;
+      font-size: 1.5em;
+      line-height: 1.5em;
     }
 
     .article-meta {
@@ -91,7 +92,6 @@
 .content {
   .inner {
     @include page-inner;
-
     .article-content {
     }
 
@@ -106,8 +106,35 @@
   }
 }
 
-.article-wrap hr {
-  margin: 3em 0;
+.article-wrap {
+  // background: #dee1e3;
+}
+
+.comment-input {
+  border-radius: 999px;
+  background: rgb(234, 238, 243);
+  padding: 0.6em 0.8em;
+  flex: 1;
+  border: none;
+  color: $secondary-text-color;
+  font-size: 0.8em;
+  margin-right: 0.6em;
+}
+
+.in-drawer-comment {
+  padding: 1em 1em 0.5em;
+  textarea {
+    box-sizing: border-box;
+    width: 100%;
+    background: rgb(234, 238, 243);
+    padding: 0.5em;
+    font-size: 1.2em;
+    color: #242926;
+    border: none;
+    border-radius: 5px;
+    resize: none;
+    margin-bottom: 0.5em;
+  }
 }
 
 @media screen and (max-width: 640px) {

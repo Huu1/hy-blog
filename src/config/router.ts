@@ -21,11 +21,16 @@ const Article = Loadable({
   loader: () => import(/* webpackChunkName:'Dashboard' */ 'Src/views/Article'),
   loading: Loading,
 });
+// const Login = Loadable({
+//   loader: () => import(/* webpackChunkName:'Dashboard' */ 'Src/components/Login'),
+//   loading: Loading,
+// });
 
 export default [
   { path: '/home', component: Home },
   { path: '/article/:id', component: Article },
   { path: '/author', component: Author },
   { path: '/test', component: Test },
+  // { path: '/login', component: Login },
   { path: '/error/404', component: Error },
 ];

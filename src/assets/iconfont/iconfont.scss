@@ -1,21 +1,39 @@
 @font-face {
-  font-family: 'iconfont'; /* Project id 2865852 */
-  src: url('iconfont.woff2?t=1634119342131') format('woff2'), url('iconfont.woff?t=1634119342131') format('woff'),
-    url('iconfont.ttf?t=1634119342131') format('truetype');
+  font-family: "iconfont"; /* Project id 2865852 */
+  src: url('iconfont.woff2?t=1636265076568') format('woff2'),
+       url('iconfont.woff?t=1636265076568') format('woff'),
+       url('iconfont.ttf?t=1636265076568') format('truetype');
 }
 
 .iconfont {
+  font-family: "iconfont" !important;
   font-size: 16px;
-  font-family: 'iconfont' !important;
   font-style: normal;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-caidan::before {
-  content: '\e790';
+.icon-pinglun:before {
+  content: "\e6bf";
 }
 
-.icon-sousuo::before {
-  content: '\e600';
+.icon-pinglun1:before {
+  content: "\e63d";
 }
+
+.icon-dianzan:before {
+  content: "\e8ad";
+}
+
+.icon-dianzan1:before {
+  content: "\e8c3";
+}
+
+.icon-caidan:before {
+  content: "\e790";
+}
+
+.icon-sousuo:before {
+  content: "\e600";
+}
+

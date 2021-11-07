@@ -1,45 +1,64 @@
+import { Button, Divider, Drawer, Paper, Skeleton } from '@material-ui/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { withRouter } from 'react-router';
 import ArticleContent from 'Src/components/ArticleContent';
-import PageLoading from 'Src/components/pageLoading';
-import Tag from 'Src/components/Tag';
 import request from 'Src/utils/request';
 import { IArticle } from 'Src/utils/type';
-import Drawer from 'rc-drawer';
 import './index.scss';
+import confetti from 'canvas-confetti';
+import CommentList from 'Src/components/ReplayList';
 
 dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);
 
-const Header = React.memo((props: { data: IArticle }) => {
+const Header = React.memo((props: { data: IArticle | undefined }) => {
   const { data: article } = props;
   return (
     <div className='header'>
-      <div className='inner'>
-        <div className='article-info'>
-          {/* {article?.label?.map((i: any) => {
-            return (
-              <>
-                <Tag style={{ color: 'white' }} value={i} key={i.id} />
-                <div style={{ marginRight: '10px' }} />
-              </>
-            );
-          })} */}
+      <div className='inner flex-column'>
+        {/* <div className='article-info' /> */}
+
+        <div className='article-title'>
+          {article ? (
+            article.title
+          ) : (
+            <>
+              <Skeleton animation='wave' height={30} width='80%' />
+              <Skeleton animation='wave' height={30} width='40%' />
+            </>
+          )}
         </div>
-        <div className='article-title'>{article?.title}</div>
+
         <div className='article-meta'>
           <div className='article-meta-avatars'>
-            <img src={article?.user?.avatar} alt='' />
+            {article?.user ? (
+              <img src={article?.user?.avatar} alt='' />
+            ) : (
+              <Skeleton animation='wave' variant='circular' width={40} height={40} />
+            )}
           </div>
           <div className='article-meta-author flex-column'>
-            <span>{article?.user?.username}</span>
+            <span>
+              {article ? (
+                article.user.username
+              ) : (
+                <>
+                  <Skeleton animation='wave' height={20} width='30%' />
+                </>
+              )}
+            </span>
             <span className='time'>
-              {/* 发布于 &nbsp;·&nbsp; */}
-              {dayjs(article?.createTime).format('DD-MM-YYYY')}
-              &nbsp;·&nbsp;
-              <span className='time'>{`${article?.readTime}分钟`}</span>
+              {article ? (
+                <>
+                  {dayjs(article?.createTime).format('DD-MM-YYYY')}
+                  &nbsp;·&nbsp;
+                  <span className='time'>{`${article?.readTime}分钟`}</span>
+                </>
+              ) : (
+                <Skeleton animation='wave' height={20} width='60%' />
+              )}
             </span>
           </div>
         </div>
@@ -52,23 +71,86 @@ const Header = React.memo((props: { data: IArticle }) => {
 });
 Header.displayName = 'Header';
 
-const Content = React.memo((props: { data: string }) => {
+const Content = React.memo((props: { data: string | undefined }) => {
   return (
     <main className='content'>
       <div className='inner'>
         <div className='article-content'>
           <ArticleContent value={props.data} />
+          <Divider style={{ margin: '80px 0' }}>end</Divider>
         </div>
-        <hr />
       </div>
     </main>
   );
 });
 Content.displayName = 'Content';
 
-const Comment = React.memo(() => {
-  return <div className='inner' />;
-});
+const Comment = React.memo(
+  (props: {
+    drawerVisible: boolean;
+    onVisibleHandle: (data: boolean, type: string) => void;
+    onDrawerDataConfirm: (data: string) => void;
+  }) => {
+    const { onVisibleHandle, drawerVisible, onDrawerDataConfirm } = props;
+
+    const replayRef = useRef<any>(null);
+
+    const toggleDrawer = (open: boolean) => (event: any) => {
+      if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+        return;
+      }
+      onVisibleHandle(open, 'article');
+    };
+
+    // eslint-disable-next-line unicorn/consistent-function-scoping
+    const like = () => {
+      confetti({
+        particleCount: 50,
+        startVelocity: 30,
+        spread: 30,
+        // origin: {
+        //   x: 0.9,
+        //   // since they fall down, start a bit higher than random
+        //   y: 0.9,
+        // },
+      });
+    };
+
+    const confirmData = () => {
+      if (replayRef?.current?.value) {
+        onDrawerDataConfirm(replayRef?.current?.value);
+      }
+    };
+
+    return (
+      <div className='inner'>
+        <Paper
+          sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 2, padding: '.4em .8em', borderRadius: '0' }}
+          elevation={3}
+          className='flex'
+        >
+          <div className='comment-input' placeholder='说点什么吧' onClick={toggleDrawer(true)}>
+            说点什么吧
+          </div>
+          <Button size='small' onClick={like}>
+            <span>🎉</span>
+            <span>&nbsp;like</span>
+          </Button>
+        </Paper>
+        <Drawer anchor='bottom' open={drawerVisible} onClose={toggleDrawer(false)}>
+          <div className='in-drawer-comment'>
+            <textarea autoFocus placeholder='请输入...' ref={replayRef} rows={3} name='' id='' />
+            <div className='text-right'>
+              <Button size='small' variant='outlined' onClick={confirmData}>
+                发布
+              </Button>
+            </div>
+          </div>
+        </Drawer>
+      </div>
+    );
+  },
+);
 Comment.displayName = 'Comment';
 
 function ArticlePage(props: any) {
@@ -76,8 +158,9 @@ function ArticlePage(props: any) {
     match: { params },
   } = props;
   const [article, setArticle] = useState<IArticle>();
-
-  const [openDrawer, setOpenDrawer] = useState(false);
+  const [commentList, setComment] = useState();
+  const [drawerVisible, setDrawerVisible] = useState(false);
+  const [replayParam, setReplayParam] = useState(null);
 
   useEffect(() => {
     const fetch = async () => {
@@ -85,7 +168,9 @@ function ArticlePage(props: any) {
         const res: any = await request.get(`article/${params.id}`);
         const { code, data, msg } = res;
         if (code === 0) {
-          setArticle(data);
+          setTimeout(() => {
+            setArticle(data);
+          }, 100);
         } else {
           console.warn(msg);
         }
@@ -99,27 +184,53 @@ function ArticlePage(props: any) {
     }
   }, [article, params.id]);
 
-  if (!article) {
-    return (
-      <div style={{ marginTop: '8em' }}>
-        <PageLoading />
-      </div>
-    );
-  }
+  const onVisibleHandle = (data: boolean, type: string): void => {
+    if (type === 'article') {
+      setReplayParam(null);
+    }
+    setDrawerVisible(data);
+  };
+
+  const onCommentHandle = (data: any): any => {
+    setReplayParam(data);
+    onVisibleHandle(true, 'replay');
+  };
+
+  const onDrawerDataConfirm = (data: string): any => {
+    console.log(data);
+    console.log(replayParam);
+  };
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const res: any = await request.get(`comment/${params.id}`);
+        const { code, data, msg } = res;
+        if (code === 0) {
+          setTimeout(() => {
+            setComment(data);
+          }, 100);
+        } else {
+          console.warn(msg);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetch();
+  }, [params.id]);
 
   return (
     <section className='article-wrap'>
       <Header data={article} />
       <Content data={article?.content.content} />
-      <Comment />
-      <button
-        type='button'
-        onClick={() => {
-          setOpenDrawer((p: any) => !p);
-        }}
-      >
-        oprn
-      </button>
+      <CommentList data={commentList} onCommentHandle={onCommentHandle} />
+      <Comment
+        onDrawerDataConfirm={onDrawerDataConfirm}
+        onVisibleHandle={onVisibleHandle}
+        drawerVisible={drawerVisible}
+      />
     </section>
   );
 }

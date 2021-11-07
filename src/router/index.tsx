@@ -3,6 +3,7 @@ import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Header from 'Src/router/Layout/Header';
 import Footer from 'Src/router/Layout/Footer';
 import Main from 'Src/router/Layout/Main';
+import Login from 'Src/router/Login';
 
 const Content = () => {
   const isArticlePage = window.location.href.includes('article');
@@ -21,6 +22,12 @@ const Router = () => {
   return (
     <HashRouter>
       <Switch>
+        <Route
+          path='/login'
+          render={() => {
+            return <Login />;
+          }}
+        />
         <Route
           path='/'
           render={() => {
