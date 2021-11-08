@@ -13,3 +13,13 @@ export function getMenuItemInMenuListByProperty(menuList: any[], key: string, va
   }
   return res;
 }
+
+const BLOG_TOKEN = 'BLOG_TOKEN';
+
+export function getToken() {
+  return window.localStorage.getItem(BLOG_TOKEN);
+}
+
+export function setToken(token: string) {
+  window.localStorage.setItem(BLOG_TOKEN, token);
+}

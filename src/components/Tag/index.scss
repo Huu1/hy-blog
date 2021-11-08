@@ -1,14 +1,8 @@
-.tag-wrap {
-  // padding: 0.2rem 0.3rem;
-  padding-left: 0;
-  // margin-right: 0.3rem;
-  // background: #fff7e6;
-  border-radius: 5px;
-  font-size: 0.7rem;
-  color: $secondary-text-color;
-  // border: 1px solid #ffd591;
-  transition: all 0.3s ease-in;
-  // &:hover {
-  //   background: black;
-  // }
+$color-hashtag: #4d97b2;
+.blog-hashtag {
+  font-size: 1em;
+  font-weight: 500;
+  color: $color-hashtag;
+  display: inline-block;
+  margin-right: 0.5em;
 }
