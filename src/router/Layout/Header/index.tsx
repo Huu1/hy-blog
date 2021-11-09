@@ -1,7 +1,10 @@
+import { Avatar } from '@material-ui/core';
 import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import Modal from 'Src/components/Modal';
 import menuList from 'Src/config/menu';
+import { getUser } from 'Src/store/feature/appSlice';
 import PopupMask from '../../../components/Mask';
 import Search from '../../../components/Search';
 import './index.scss';
@@ -11,6 +14,8 @@ const search = require('../../../assets/search.svg');
 function Header() {
   const [menuActive, setMenuActive] = useState(false);
   const [searchActive, setSearchActive] = useState(false);
+
+  const user = useSelector(getUser);
 
   const menuActiveChange = (value: boolean) => {
     setMenuActive(value);
@@ -54,8 +59,11 @@ function Header() {
           <span className='inline-block mr-left'>Menu</span>
         </div>
 
-        <div className='pointer mr-left-auto ' onClick={searchActiveChange}>
-          <i className='icon iconfont icon-sousuo' />
+        <div className=' mr-left-auto flex column-center'>
+          <i className='icon iconfont pointer icon-sousuo' onClick={searchActiveChange} />
+          {user && (
+            <Avatar style={{ marginLeft: '.5em' }} sx={{ width: 20, height: 20 }} src='/static/images/avatar/1.jpg' />
+          )}
         </div>
       </nav>
       {menuActive && (

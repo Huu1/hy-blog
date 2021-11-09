@@ -4,6 +4,7 @@ import Header from 'Src/router/Layout/Header';
 import Footer from 'Src/router/Layout/Footer';
 import Main from 'Src/router/Layout/Main';
 import Login from 'Src/router/Login';
+import { getToken } from 'Src/utils';
 
 const Content = () => {
   const isArticlePage = window.location.href.includes('article');
@@ -23,8 +24,12 @@ const Router = () => {
     <HashRouter>
       <Switch>
         <Route
+          exact
           path='/login'
           render={() => {
+            if (getToken()) {
+              return <Redirect to='/' />;
+            }
             return <Login />;
           }}
         />

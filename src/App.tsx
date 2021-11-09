@@ -17,8 +17,6 @@ const Router = React.lazy(() => {
         if (res.code === 0) {
           data.next(res.data);
         }
-        console.log(1);
-        resolve(import('./router'));
       } catch (error: any) {
         console.log(error);
       }
@@ -29,8 +27,6 @@ const Router = React.lazy(() => {
         if (res.code === 0) {
           data.next(res.data);
         }
-
-        resolve(import('./router'));
       } catch (error: any) {
         console.log(error);
       }
@@ -40,6 +36,7 @@ const Router = React.lazy(() => {
     } else {
       noToken();
     }
+    resolve(import('./router'));
   });
 });
 
@@ -48,7 +45,6 @@ function App() {
   useEffect(() => {
     data.subscribe((res) => {
       if (!res) return;
-      console.log(2);
       dispatch(setAppData(res.appData));
       if (res.user) {
         dispatch(setUser(res.user));

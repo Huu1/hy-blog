@@ -23,3 +23,7 @@ export function getToken() {
 export function setToken(token: string) {
   window.localStorage.setItem(BLOG_TOKEN, token);
 }
+
+export function removeToken() {
+  window.localStorage.removeItem(BLOG_TOKEN);
+}

@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { getToken } from 'Src/utils';
+import { getToken, setToken } from 'Src/utils';
 import request from 'Src/utils/request';
 
 interface IState {
@@ -16,21 +16,11 @@ const initialState: IState = {
   error: undefined,
 };
 
-export const fetchAppData = createAsyncThunk('posts/fetchAppData', async () => {
-  if (getToken()) {
-    const response = await request.post('/refresh', { token: getToken() });
-    // if (response.code === 0) {
-    //   return response.data;
-    // }
-    console.log(response);
-  } else {
-    const response = await request.get('/getConfig');
-    // if (response.code === 0) {
-    //   return response.data;
-    // }
-    console.log(response);
-  }
-});
+// export const fetchUser = createAsyncThunk('posts/fetchUser', async (data: { username: string; password: string }) => {
+//   const response = await request.post('/auth/login', data);
+//   console.log(response);
+//   return {};
+// });
 
 const appSlice = createSlice({
   name: 'app',
@@ -45,23 +35,25 @@ const appSlice = createSlice({
       state.appData = action.payload;
     },
   },
-  extraReducers(builder) {
-    builder
-      .addCase(fetchAppData.pending, (state: IState) => {
-        // eslint-disable-next-line no-param-reassign
-        state.status = 'loading';
-      })
-      .addCase(fetchAppData.fulfilled, (state: IState, action: any) => {
-        // eslint-disable-next-line no-param-reassign
-        state.status = 'succeeded';
-      })
-      .addCase(fetchAppData.rejected, (state: IState, action) => {
-        // eslint-disable-next-line no-param-reassign
-        state.status = 'failed';
-        // eslint-disable-next-line no-param-reassign
-        state.error = action.error.message;
-      });
-  },
+  // extraReducers(builder) {
+  //   builder
+  //     .addCase(fetchUser.pending, (state: IState) => {
+  //       // eslint-disable-next-line no-param-reassign
+  //       state.status = 'loading';
+  //     })
+  //     .addCase(fetchUser.fulfilled, (state: IState, action: any) => {
+  //       // eslint-disable-next-line no-param-reassign
+  //       state.status = 'succeeded';
+  //       // eslint-disable-next-line no-param-reassign
+  //       state.user = action.payload;
+  //     })
+  //     .addCase(fetchUser.rejected, (state: IState, action) => {
+  //       // eslint-disable-next-line no-param-reassign
+  //       state.status = 'failed';
+  //       // eslint-disable-next-line no-param-reassign
+  //       state.error = action.error.message;
+  //     });
+  // },
 });
 
 export const { setUser, setAppData } = appSlice.actions;
