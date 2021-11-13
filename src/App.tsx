@@ -11,6 +11,7 @@ const data = new BehaviorSubject<any>(null);
 
 const Router = React.lazy(() => {
   return new Promise<any>((resolve) => {
+    // eslint-disable-next-line unicorn/consistent-function-scoping
     const noToken = async () => {
       try {
         const res: any = await request.get('/auth/getConfig');

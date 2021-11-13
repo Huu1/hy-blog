@@ -5,16 +5,18 @@ import Footer from 'Src/router/Layout/Footer';
 import Main from 'Src/router/Layout/Main';
 import Login from 'Src/router/Login';
 import { getToken } from 'Src/utils';
+import MainWrap from './Layout/Main/main';
 
 const Content = () => {
-  const isArticlePage = window.location.href.includes('article');
+  // const isArticlePage = window.location.href.includes('article');
   return (
     <div className='app flex-column' style={{ minHeight: '100vh' }}>
-      <Header />
-      <main className={`${isArticlePage ? '' : 'page'} `}>
+      {/* <Header /> */}
+      {/* <main className={`${isArticlePage ? '' : 'page'} `}> */}
+      <MainWrap>
         <Main />
-      </main>
-      <Footer />
+      </MainWrap>
+      {/* <Footer /> */}
     </div>
   );
 };

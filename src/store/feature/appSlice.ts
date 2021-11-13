@@ -62,3 +62,5 @@ export default appSlice.reducer;
 
 // 获取当前用户
 export const getUser = (state: any) => state.app.user;
+
+export const getAppdata = (state: any) => state.app.appData;

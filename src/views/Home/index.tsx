@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ArticleCard from 'Src/components/ArticleCard';
 import PageLoading from 'Src/components/pageLoading';
