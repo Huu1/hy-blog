@@ -1,8 +1,11 @@
-.Home {
+.home {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+  @include page-inner();
 }
 .loadMore {
   border: 1px solid #aaa;
-  padding: 0.3em;
+  padding: 0.6em 0.8em;
   color: #aaa;
   border-radius: 5px;
   font-size: 0.8rem;

@@ -22,11 +22,11 @@ const ArticleContent = (props: any) => {
     <>
       {!init && (
         <div>
-          <Skeleton animation='wave' height={30} width='30%' />
-          <Skeleton height={30} width='100%' />
-          <Skeleton height={80} width='80%' />
-          <Skeleton height={80} width='100%' />
-          <Skeleton height={30} width='60%' />
+          <Skeleton animation='wave' height={25} width='30%' />
+          <Skeleton height={20} width='100%' />
+          <Skeleton height={20} width='100%' />
+          <Skeleton height={20} width='100%' />
+          <Skeleton height={20} width='60%' />
         </div>
       )}
       <div style={{ minHeight: '8rem' }} ref={content} />

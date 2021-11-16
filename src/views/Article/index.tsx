@@ -1,4 +1,4 @@
-import { Button, Divider, Drawer, Paper, Skeleton } from '@material-ui/core';
+import { Button, Divider, Drawer, Paper, Skeleton, useScrollTrigger } from '@material-ui/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import React, { useEffect, useRef, useState } from 'react';
@@ -8,7 +8,7 @@ import request from 'Src/utils/request';
 import { IArticle } from 'Src/utils/type';
 import './index.scss';
 import confetti from 'canvas-confetti';
-import CommentList from 'Src/components/ReplayList';
+import SwipeableEdgeDrawer from './Comment';
 
 dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);
@@ -17,16 +17,14 @@ const Header = React.memo((props: { data: IArticle | undefined }) => {
   const { data: article } = props;
   return (
     <div className='header'>
-      <div className='inner flex-column'>
-        {/* <div className='article-info' /> */}
-
+      <div className=' flex-column'>
         <div className='article-title'>
           {article ? (
             article.title
           ) : (
             <>
-              <Skeleton animation='wave' height={30} width='80%' />
-              <Skeleton animation='wave' height={30} width='40%' />
+              <Skeleton animation='wave' height={20} width='80%' />
+              <Skeleton animation='wave' height={20} width='40%' />
             </>
           )}
         </div>
@@ -74,11 +72,9 @@ Header.displayName = 'Header';
 const Content = React.memo((props: { data: string | undefined }) => {
   return (
     <main className='content'>
-      <div className='inner'>
-        <div className='article-content'>
-          <ArticleContent value={props.data} />
-          <Divider style={{ margin: '80px 0' }}>end</Divider>
-        </div>
+      <div className='article-content'>
+        <ArticleContent value={props.data} />
+        <Divider style={{ margin: '80px 0' }}>end</Divider>
       </div>
     </main>
   );
@@ -123,7 +119,7 @@ const Comment = React.memo(
     };
 
     return (
-      <div className='inner'>
+      <div>
         <Paper
           sx={{ position: 'fixed', bottom: 0, left: 0, right: 0, zIndex: 2, padding: '.4em .8em', borderRadius: '0' }}
           elevation={3}
@@ -139,7 +135,7 @@ const Comment = React.memo(
         </Paper>
         <Drawer anchor='bottom' open={drawerVisible} onClose={toggleDrawer(false)}>
           <div className='in-drawer-comment'>
-            <textarea autoFocus placeholder='请输入...' ref={replayRef} rows={3} name='' id='' />
+            <textarea placeholder='请输入...' ref={replayRef} rows={3} name='' id='' />
             <div className='text-right'>
               <Button size='small' variant='outlined' onClick={confirmData}>
                 发布
@@ -161,6 +157,10 @@ function ArticlePage(props: any) {
   const [commentList, setComment] = useState();
   const [drawerVisible, setDrawerVisible] = useState(false);
   const [replayParam, setReplayParam] = useState(null);
+
+  const trigger = useScrollTrigger({
+    target: window,
+  });
 
   useEffect(() => {
     const fetch = async () => {
@@ -201,36 +201,39 @@ function ArticlePage(props: any) {
     console.log(replayParam);
   };
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const res: any = await request.get(`comment/${params.id}`);
-        const { code, data, msg } = res;
-        if (code === 0) {
-          setTimeout(() => {
-            setComment(data);
-          }, 100);
-        } else {
-          console.warn(msg);
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetch = async () => {
+  //     try {
+  //       const res: any = await request.get(`comment/${params.id}`);
+  //       const { code, data, msg } = res;
+  //       if (code === 0) {
+  //         setTimeout(() => {
+  //           setComment(data);
+  //         }, 100);
+  //       } else {
+  //         console.warn(msg);
+  //       }
+  //     } catch (error) {
+  //       console.error(error);
+  //     }
+  //   };
 
-    fetch();
-  }, [params.id]);
+  //   fetch();
+  // }, [params.id]);
 
   return (
     <section className='article-wrap'>
       <Header data={article} />
       <Content data={article?.content.content} />
-      <CommentList data={commentList} onCommentHandle={onCommentHandle} />
-      <Comment
-        onDrawerDataConfirm={onDrawerDataConfirm}
-        onVisibleHandle={onVisibleHandle}
-        drawerVisible={drawerVisible}
-      />
+      {/* <CommentList data={commentList} onCommentHandle={onCommentHandle} /> */}
+      <SwipeableEdgeDrawer articleId={params.id} />
+      {/* {trigger && (
+        <Comment
+          onDrawerDataConfirm={onDrawerDataConfirm}
+          onVisibleHandle={onVisibleHandle}
+          drawerVisible={drawerVisible}
+        />
+      )} */}
     </section>
   );
 }

@@ -1,22 +1,36 @@
 import React from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
-import Header from 'Src/router/Layout/Header';
-import Footer from 'Src/router/Layout/Footer';
 import Main from 'Src/router/Layout/Main';
 import Login from 'Src/router/Login';
 import { getToken } from 'Src/utils';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
+import { useDispatch, useSelector } from 'react-redux';
+import { getSideDrawerVisible, toggleSideDrawerVisible } from 'Src/store/feature/appSlice';
 import MainWrap from './Layout/Main/main';
+import AppMenu from './Layout/SideBar';
+
+const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 const Content = () => {
-  // const isArticlePage = window.location.href.includes('article');
+  const drawerVisible = useSelector(getSideDrawerVisible);
+  const dispatch = useDispatch();
   return (
     <div className='app flex-column' style={{ minHeight: '100vh' }}>
-      {/* <Header /> */}
-      {/* <main className={`${isArticlePage ? '' : 'page'} `}> */}
       <MainWrap>
         <Main />
       </MainWrap>
-      {/* <Footer /> */}
+
+      {/* routerList */}
+      <SwipeableDrawer
+        disableBackdropTransition={!iOS}
+        disableDiscovery={iOS}
+        anchor='left'
+        open={drawerVisible}
+        onClose={() => dispatch(toggleSideDrawerVisible())}
+        onOpen={() => dispatch(toggleSideDrawerVisible())}
+      >
+        <AppMenu />
+      </SwipeableDrawer>
     </div>
   );
 };

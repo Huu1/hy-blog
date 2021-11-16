@@ -42,7 +42,5 @@
 
 // 页面 padding
 @mixin page-inner {
-  max-width: $page-inner-width;
-  margin: 0 auto;
-  padding: 0 8rem;
+  padding: 0 1rem;
 }

@@ -1,54 +1,76 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ArticleCard from 'Src/components/ArticleCard';
-import PageLoading from 'Src/components/pageLoading';
-import { selectAllArticle, fetchArticle } from 'Src/store/feature/articleSlice';
+// import PageLoading from 'Src/components/pageLoading';
+import { selectAllArticle, fetchArticle, resetArticle } from 'Src/store/feature/articleSlice';
 import { IArticle } from 'Src/utils/type';
 import { uid } from 'Src/config/user';
+import ScrollBar from 'Src/router/Layout/ScrollBar';
+import { getAppdata } from 'Src/store/feature/appSlice';
+import Box from '@material-ui/core/Box/Box';
+import Skeleton from '@mui/material/Skeleton';
 import './index.scss';
 
 function Home() {
   const dispatch = useDispatch();
-  const [current, setCurrent] = useState(1);
+
   const [loading, setLoading] = useState(false);
-  const { error: isError, status, total } = useSelector((state: any) => state.article);
-  const articleList = useSelector(selectAllArticle);
 
-  const [realData, setRealData] = useState<IArticle[]>(articleList);
+  // 文章缓存
+  const { data: articleList, status, total } = useSelector(selectAllArticle);
 
+  // 页码
+  const [current, setCurrent] = useState(1);
+
+  // 分类列表
+  const { tagList } = useSelector(getAppdata);
+  const [currentTag, setCurrentTag] = useState(tagList[0].tagId);
+
+  // 获取文章
+  const fetchData = useCallback(
+    (cb) => {
+      dispatch(fetchArticle({ current, uid, tagId: currentTag, cb }));
+    },
+    [current, currentTag, dispatch],
+  );
+
+  // 获取文章  loading闪烁
   useEffect(() => {
-    if (status === 'idle') {
-      setLoading(true);
-      dispatch(fetchArticle({ current: 1, uid }));
-    }
-  }, [dispatch, status]);
-
-  useEffect(() => {
-    if (current > 1) {
-      dispatch(fetchArticle({ current, uid }));
-    }
-  }, [current, dispatch]);
-
-  useEffect(() => {
-    if (status === 'succeeded') {
-      setTimeout(() => {
+    setLoading(true);
+    setTimeout(() => {
+      fetchData(() => {
         setLoading(false);
-        setRealData(articleList);
-      }, 300);
-    } else if (status === 'loading') {
-      setLoading(true);
-    }
-  }, [status, articleList]);
+      });
+    }, 300);
+  }, [dispatch, fetchData]);
 
   const getMore = () => {
-    setCurrent((c) => c + 1);
+    setCurrent(current + 1);
+  };
+
+  const onTagChange = (tagId: string) => {
+    dispatch(resetArticle());
+    setCurrent(1);
+    setCurrentTag(tagId);
   };
 
   const load = () => {
     if (loading) {
-      return <PageLoading />;
+      return (
+        <Box sx={{ width: '100%' }}>
+          <Skeleton />
+          <Skeleton animation='wave' />
+          <Skeleton animation={false} />
+        </Box>
+      );
     }
-    if (realData.length === total) {
+    if (status === 'failed ') {
+      return <div>服务器开了小差~</div>;
+    }
+    if (total === 0) {
+      return <span style={{ color: '#5a656b' }}>空空如也~</span>;
+    }
+    if (articleList && articleList?.length === total) {
       return <span style={{ color: '#5a656b' }}>我是有底线的~</span>;
     }
     return (
@@ -58,17 +80,16 @@ function Home() {
     );
   };
 
-  if (isError) {
-    return <span>错误</span>;
-  }
-
   return (
-    <div>
-      {realData?.map((article: IArticle) => {
-        return <ArticleCard key={article.articleId} article={article} />;
-      })}
-      <div style={{ textAlign: 'center', marginTop: '1rem' }}>{load()}</div>
-    </div>
+    <>
+      <ScrollBar onTagChange={onTagChange} tagList={tagList} currentTag={currentTag} />
+      <div className='home'>
+        {articleList?.map((article: IArticle) => {
+          return <ArticleCard key={article.articleId} article={article} />;
+        })}
+        <div style={{ textAlign: 'center', marginTop: '2rem' }}>{load()}</div>
+      </div>
+    </>
   );
 }
 

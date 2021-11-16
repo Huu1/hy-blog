@@ -1,158 +1,114 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import { styled, ThemeProvider, createTheme } from '@mui/material/styles';
-import Divider from '@mui/material/Divider';
+import { useDispatch, useSelector } from 'react-redux';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Paper from '@mui/material/Paper';
-import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import Home from '@mui/icons-material/Home';
-import { useSelector } from 'react-redux';
-import { getAppdata } from 'Src/store/feature/appSlice';
-// import People from '@mui/icons-material/People';
-// import PermMedia from '@mui/icons-material/PermMedia';
-import Dns from '@mui/icons-material/Dns';
-// import Public from '@mui/icons-material';
+import Divider from '@mui/material/Divider';
+import Label from '@mui/icons-material/Label';
+import Brightness4Icon from '@mui/icons-material/Brightness4';
+import Brightness7Icon from '@mui/icons-material/Brightness7';
+import { withRouter } from 'react-router';
+import menuList, { IMenu } from 'Src/config/menu';
+import { Avatar, IconButton, ListItemAvatar, useTheme } from '@material-ui/core';
+import { getUser, toggleSideDrawerVisible } from 'Src/store/feature/appSlice';
+import { ColorModeContext } from 'Src/App';
 
-// const data = [
-//   // { icon: <mdiLanguageJavascript />, label: 'Authentication' },
-//   // { icon: <Dns />, label: 'Database' },
-//   // { icon: <PermMedia />, label: 'Storage' },
-//   { label: 'Hosting' },
-// ];
+const IconMap: any = {
+  label: <Label />,
+  home: <Label />,
+  tag: <Label />,
+};
 
-const FireNav = styled(List)<{ component?: React.ElementType }>({
-  '& .MuiListItemButton-root': {
-    paddingLeft: 24,
-    paddingRight: 24,
-  },
-  '& .MuiListItemIcon-root': {
-    minWidth: 0,
-    marginRight: 16,
-  },
-  '& .MuiSvgIcon-root': {
-    fontSize: 20,
-  },
-});
-
-const BoxItem = (props: any) => {
-  const { data, title } = props;
-  const [open, setOpen] = React.useState(false);
+const UserInfo = () => {
+  const user = useSelector(getUser);
   return (
-    <Box
-      sx={{
-        bgcolor: open ? 'rgba(71, 98, 130, 0.2)' : null,
-        pb: open ? 2 : 0,
-      }}
-    >
-      <ListItemButton
-        alignItems='flex-start'
-        onClick={() => setOpen(!open)}
-        sx={{
-          px: 3,
-          pt: 2.5,
-          pb: open ? 0 : 2.5,
-        }}
-      >
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'rgb(5, 30, 52)' }}>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar alt='Remy Sharp' src='/static/images/avatar/1.jpg' />
+        </ListItemAvatar>
         <ListItemText
-          primary={title}
           primaryTypographyProps={{
             fontSize: 15,
             fontWeight: 'medium',
             lineHeight: '20px',
             mb: '2px',
+            color: 'rgba(255,255,255,0.5)',
           }}
-          // secondary={}
           secondaryTypographyProps={{
-            noWrap: true,
-            fontSize: 12,
-            width: 50,
-            lineHeight: '16px',
-            color: open ? 'rgba(0,0,0,0)' : 'rgba(255,255,255,0.5)',
+            fontSize: 15,
+            fontWeight: 'medium',
+            lineHeight: '20px',
+            mb: '2px',
+            color: 'rgba(255,255,255,0.5)',
           }}
-          sx={{ my: 0 }}
+          primary={user?.username}
+          secondary='Jan 9, 2014'
         />
-        <KeyboardArrowDown
-          sx={{
-            mr: -1,
-            transform: open ? 'rotate(-180deg)' : 'rotate(0)',
-            transition: '0.2s',
-          }}
-        />
-      </ListItemButton>
-      {open &&
-        data.map((item: any) => (
-          <ListItemButton key={item.title} sx={{ py: 0, minHeight: 32, color: 'rgba(255,255,255,.8)' }}>
-            <ListItemIcon sx={{ color: 'inherit' }}>
-              <Dns />
-            </ListItemIcon>
-            <ListItemText primary={item.title} primaryTypographyProps={{ fontSize: 14, fontWeight: 'medium' }} />
-          </ListItemButton>
-        ))}
-    </Box>
+      </ListItem>
+    </List>
   );
 };
 
-export default function CustomizedList() {
-  const appdata = useSelector(getAppdata);
-
+const AppMenu = (props: any) => {
+  const { history } = props;
+  const theme = useTheme();
+  const colorMode = React.useContext(ColorModeContext);
+  const dispatch = useDispatch();
+  const itemClick = (path: string) => {
+    dispatch(toggleSideDrawerVisible());
+    history.push(path);
+  };
   return (
-    <Box sx={{ display: 'flex' }} style={{ height: '100%' }}>
-      <ThemeProvider
-        theme={createTheme({
-          components: {
-            MuiListItemButton: {
-              defaultProps: {
-                disableTouchRipple: true,
-              },
-            },
-          },
-          palette: {
-            mode: 'dark',
-            primary: { main: 'rgb(102, 157, 246)' },
-            background: { paper: 'rgb(5, 30, 52)' },
-          },
-        })}
-      >
-        <Paper elevation={0} sx={{ maxWidth: 256 }} style={{ borderRadius: '0' }}>
-          <FireNav component='nav' disablePadding>
-            <ListItemButton component='a' href='#customized-list'>
-              <ListItemIcon sx={{ fontSize: 20 }}>🔥</ListItemIcon>
-              <ListItemText
-                sx={{ my: 0 }}
-                primary='Firebash'
-                primaryTypographyProps={{
-                  fontSize: 20,
-                  fontWeight: 'medium',
-                  letterSpacing: 0,
-                }}
-              />
-            </ListItemButton>
-            <Divider />
-            <ListItem component='div' disablePadding>
-              <ListItemButton sx={{ height: 56 }}>
-                <ListItemIcon>
-                  <Home color='primary' />
+    <Box sx={{ width: '100%', height: '100%', maxWidth: 360, bgcolor: 'rgb(5, 30, 52)', padding: '.5rem' }}>
+      <UserInfo />
+      <Divider />
+      <List>
+        {menuList.map((menu: IMenu) => {
+          return (
+            <ListItem disablePadding key={menu.title} onClick={() => itemClick(menu.path)}>
+              <ListItemButton>
+                <ListItemIcon style={{ color: 'rgba(255,255,255,0.5)' }}>
+                  {IconMap[menu.icon] || <Label />}
                 </ListItemIcon>
                 <ListItemText
-                  primary='返回首页'
+                  primary={menu.title}
                   primaryTypographyProps={{
-                    color: 'primary',
+                    fontSize: 15,
                     fontWeight: 'medium',
-                    variant: 'body2',
+                    lineHeight: '20px',
+                    mb: '2px',
+                    color: 'rgba(255,255,255,0.5)',
                   }}
                 />
               </ListItemButton>
             </ListItem>
-            <Divider />
-            <BoxItem data={appdata?.tagList} title='分类' />
-            <BoxItem data={appdata?.labelList} title='标签' />
-          </FireNav>
-        </Paper>
-      </ThemeProvider>
+          );
+        })}
+      </List>
+      <Divider />
+      {/* <Box
+        sx={{
+          display: 'flex',
+          width: '100%',
+          alignItems: 'center',
+          justifyContent: 'center',
+          bgcolor: 'background.default',
+          color: 'text.primary',
+          borderRadius: 1,
+          p: 3,
+        }}
+      >
+        {theme.palette.mode} mode
+        <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color='inherit'>
+          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
+        </IconButton>
+      </Box> */}
     </Box>
   );
-}
+};
+
+export default withRouter(AppMenu);

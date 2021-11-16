@@ -18,23 +18,29 @@ const initialState: IState = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-empty-function
-export const fetchArticle = createAsyncThunk('posts/fetchArticle', async ({ current, uid }: any) => {
-  // eslint-disable-next-line no-shadow
-  const getUrl = (current: number, uid: string): string =>
-    `article/queryAllPublish?uid=${uid}&pageSize=4&current=${current}`;
-  const response: any = await request.get(getUrl(current, uid));
-  if (response.code === 0) {
-    return response.data;
-  }
-  return [];
-});
+export const fetchArticle = createAsyncThunk(
+  'posts/fetchArticle',
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  async ({ current, uid, tagId, cb = () => {} }: any) => {
+    // eslint-disable-next-line no-shadow
+    const getUrl = (current: number, uid: string): string =>
+      `article/queryAllPublish?uid=${uid}&pageSize=2&current=${current}&tagId=${tagId}`;
+    const response: any = await request.get(getUrl(current, uid));
+    cb();
+    if (response.code === 0) {
+      return response.data;
+    }
+    return [];
+  },
+);
 
 const articleSlice = createSlice({
   name: 'article',
   initialState,
   reducers: {
-    addArticle(state, action) {
-      state.data.push(...action.payload);
+    resetArticle(state) {
+      // eslint-disable-next-line no-param-reassign
+      state.data = [];
     },
   },
   extraReducers(builder) {
@@ -60,9 +66,9 @@ const articleSlice = createSlice({
   },
 });
 
-export const { addArticle } = articleSlice.actions;
+export const { resetArticle } = articleSlice.actions;
 
 export default articleSlice.reducer;
 
 // 取所有文章
-export const selectAllArticle = (state: any) => state.article.data;
+export const selectAllArticle = (state: any) => state.article;

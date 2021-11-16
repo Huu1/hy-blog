@@ -6,90 +6,78 @@ $cat-technology: #651fff;
 $cat-psychology: #e85808;
 
 .article-wrap {
-  .inner {
-    max-width: calc(45rem + 8vw);
-    margin: 0 auto;
-    padding: 0 8rem;
-    .card {
-      overflow: hidden;
-      box-shadow: 0px 2px 20px $gray-light;
-      background: #fff;
-      border-radius: 0.5em;
-      position: relative;
-      margin-bottom: 1.5rem;
-      transition: 250ms all ease-in-out;
-    }
-    .card:hover {
-      box-shadow: 0px 2px 40px $gray-light;
-    }
-
-    .header-img {
-      position: absolute;
-      object-fit: cover;
-      height: 11rem;
-      width: 100%;
-    }
-    .category-tag {
-      font-size: 0.8rem;
-      font-weight: bold;
-      color: white;
-      background: red;
-      padding: 0.5rem 1.3rem 0.5rem 1rem;
-      text-transform: uppercase;
-      position: absolute;
-      z-index: 1;
-      top: 1rem;
-      border-radius: 0 2rem 2rem 0;
-    }
-    /*categorys*/
-    .popular {
-      background: $cat-popular;
-    }
-    .technology {
-      background: $cat-technology;
-    }
-
-    .psychology {
-      background: $cat-psychology;
-    }
-
-    .card-body {
-      margin: 12rem 1rem 1rem 1rem;
-    }
-    .bog-title {
-      line-height: 1.5rem;
-      margin: 1.2rem 0 0.8rem;
-      font-size: 1.3rem;
-      font-weight: bold;
-    }
-    .blog-description {
-      color: $gray-med;
-      font-size: 1.1rem;
-    }
-
-    .card-footer {
-      display: flex;
-      margin-top: 2rem;
-      align-items: center;
-      color: $color-content-secondary;
-      .right-action {
-        display: inline-block;
-        margin: 0 1.2em 0;
-        margin-left: auto;
-        font-size: 1em;
-      }
-      span > i {
-        font-size: 1.2em;
-        display: inline-block;
-        margin-right: 0.15em;
-        color: $primary-text-color;
-      }
-    }
+  .card {
+    overflow: hidden;
+    box-shadow: 0px 2px 20px $gray-light;
+    border-radius: 0.5em;
+    position: relative;
+    margin-bottom: 1.5rem;
+    transition: 250ms all ease-in-out;
   }
-}
+  .card:hover {
+    box-shadow: 0px 2px 40px $gray-light;
+  }
 
-@media screen and (max-width: 640px) {
-  .article-wrap .inner {
-    padding: 0 $page-mobile-padding;
+  .header-img {
+    position: absolute;
+    object-fit: cover;
+    height: 11rem;
+    width: 100%;
+  }
+  .category-tag {
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: white;
+    background: red;
+    padding: 0.5rem 1.3rem 0.5rem 1rem;
+    text-transform: uppercase;
+    position: absolute;
+    z-index: 1;
+    top: 1rem;
+    border-radius: 0 2rem 2rem 0;
+  }
+  /*categorys*/
+  .popular {
+    background: $cat-popular;
+  }
+  .technology {
+    background: $cat-technology;
+  }
+
+  .psychology {
+    background: $cat-psychology;
+  }
+
+  .card-body {
+    margin: 12rem 1rem 1rem 1rem;
+  }
+  .bog-title {
+    line-height: 1.5rem;
+    margin: 1.2rem 0 0.8rem;
+    font-size: 1.3rem;
+    font-weight: bold;
+  }
+  .blog-description {
+    color: $color-content-secondary;
+    font-size: 1.1rem;
+  }
+
+  .card-footer {
+    display: flex;
+    margin-top: 2rem;
+    align-items: center;
+    color: $color-content-secondary;
+    .right-action {
+      display: inline-block;
+      margin: 0 1.2em 0;
+      margin-left: auto;
+      font-size: 1em;
+    }
+    span > i {
+      font-size: 1.2em;
+      display: inline-block;
+      margin-right: 0.15em;
+      color: $primary-text-color;
+    }
   }
 }

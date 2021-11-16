@@ -1,4 +1,9 @@
-const menuList = [
+export interface IMenu {
+  title: string;
+  path: string;
+  icon: string;
+}
+const menuList: IMenu[] = [
   {
     title: '首页',
     path: '/home',

@@ -2,12 +2,16 @@ import React, { Suspense, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import 'dayjs/locale/zh-cn';
 import { BehaviorSubject } from 'rxjs';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { StartLoading } from './components/StartLoading';
 import { getToken } from './utils';
 import request from './utils/request';
 import { setAppData, setUser } from './store/feature/appSlice';
 
 const data = new BehaviorSubject<any>(null);
+
+// eslint-disable-next-line @typescript-eslint/no-empty-function
+export const ColorModeContext = React.createContext({ toggleColorMode: () => {} });
 
 const Router = React.lazy(() => {
   return new Promise<any>((resolve) => {
@@ -18,6 +22,7 @@ const Router = React.lazy(() => {
         if (res.code === 0) {
           data.next(res.data);
         }
+        resolve(import('./router'));
       } catch (error: any) {
         console.log(error);
       }
@@ -28,6 +33,7 @@ const Router = React.lazy(() => {
         if (res.code === 0) {
           data.next(res.data);
         }
+        resolve(import('./router'));
       } catch (error: any) {
         console.log(error);
       }
@@ -37,7 +43,6 @@ const Router = React.lazy(() => {
     } else {
       noToken();
     }
-    resolve(import('./router'));
   });
 });
 
@@ -53,9 +58,34 @@ function App() {
     });
   }, [dispatch]);
 
+  const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+  const colorMode = React.useMemo(
+    () => ({
+      toggleColorMode: () => {
+        setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+      },
+    }),
+    [],
+  );
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode],
+  );
+
   return (
     <Suspense fallback={<StartLoading />}>
-      <Router />
+      {/* <Router /> */}
+      <ColorModeContext.Provider value={colorMode}>
+        <ThemeProvider theme={theme}>
+          <Router />
+        </ThemeProvider>
+      </ColorModeContext.Provider>
     </Suspense>
   );
 }
