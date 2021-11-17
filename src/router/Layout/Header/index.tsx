@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import Modal from 'Src/components/Modal';
 import menuList from 'Src/config/menu';
-import { getUser } from 'Src/store/feature/appSlice';
+import { getUser } from 'Src/store/feature/userSlice';
 import PopupMask from '../../../components/Mask';
 import Search from '../../../components/Search';
 import './index.scss';

@@ -10,6 +10,7 @@ import { getAppdata } from 'Src/store/feature/appSlice';
 import Box from '@material-ui/core/Box/Box';
 import Skeleton from '@mui/material/Skeleton';
 import './index.scss';
+import { withRouter } from 'react-router';
 
 function Home() {
   const dispatch = useDispatch();
@@ -37,11 +38,16 @@ function Home() {
   // 获取文章  loading闪烁
   useEffect(() => {
     setLoading(true);
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       fetchData(() => {
         setLoading(false);
       });
     }, 300);
+
+    return () => {
+      // eslint-disable-next-line no-unused-expressions
+      timer && clearTimeout(timer);
+    };
   }, [dispatch, fetchData]);
 
   const getMore = () => {
@@ -64,7 +70,7 @@ function Home() {
         </Box>
       );
     }
-    if (status === 'failed ') {
+    if (status === 'failed') {
       return <div>服务器开了小差~</div>;
     }
     if (total === 0) {
@@ -93,4 +99,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default withRouter(Home);

@@ -8,13 +8,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Divider from '@mui/material/Divider';
 import Label from '@mui/icons-material/Label';
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import Brightness7Icon from '@mui/icons-material/Brightness7';
 import { withRouter } from 'react-router';
 import menuList, { IMenu } from 'Src/config/menu';
-import { Avatar, IconButton, ListItemAvatar, useTheme } from '@material-ui/core';
-import { getUser, toggleSideDrawerVisible } from 'Src/store/feature/appSlice';
-import { ColorModeContext } from 'Src/App';
+import { Avatar, ListItemAvatar } from '@material-ui/core';
+import { toggleSideDrawerVisible } from 'Src/store/feature/appSlice';
+import { getUser } from 'Src/store/feature/userSlice';
 
 const IconMap: any = {
   label: <Label />,
@@ -55,8 +53,6 @@ const UserInfo = () => {
 
 const AppMenu = (props: any) => {
   const { history } = props;
-  const theme = useTheme();
-  const colorMode = React.useContext(ColorModeContext);
   const dispatch = useDispatch();
   const itemClick = (path: string) => {
     dispatch(toggleSideDrawerVisible());
@@ -90,23 +86,6 @@ const AppMenu = (props: any) => {
         })}
       </List>
       <Divider />
-      {/* <Box
-        sx={{
-          display: 'flex',
-          width: '100%',
-          alignItems: 'center',
-          justifyContent: 'center',
-          bgcolor: 'background.default',
-          color: 'text.primary',
-          borderRadius: 1,
-          p: 3,
-        }}
-      >
-        {theme.palette.mode} mode
-        <IconButton sx={{ ml: 1 }} onClick={colorMode.toggleColorMode} color='inherit'>
-          {theme.palette.mode === 'dark' ? <Brightness7Icon /> : <Brightness4Icon />}
-        </IconButton>
-      </Box> */}
     </Box>
   );
 };

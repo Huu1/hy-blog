@@ -5,8 +5,7 @@
 import axios from 'axios';
 import { getToken, removeToken } from '.';
 
-axios.defaults.baseURL = 'http://1.116.75.166:3000';
-// axios.defaults.baseURL = 'http://localhost:3000';
+axios.defaults.baseURL = '/api';
 
 /**
  * 请求失败后的错误统一处理

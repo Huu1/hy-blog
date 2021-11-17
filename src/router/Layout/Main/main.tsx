@@ -90,7 +90,7 @@ const MainWrap = (props: Props | any) => {
     if (isHome) {
       dispatch(toggleSideDrawerVisible());
     } else {
-      history.goBack();
+      history.push('/home?target=true');
     }
   };
 

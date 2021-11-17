@@ -2,7 +2,7 @@ import { Alert, Button, Snackbar } from '@material-ui/core';
 import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { withRouter } from 'react-router';
-import { setUser } from 'Src/store/feature/appSlice';
+// import { setUser } from 'Src/store/feature/appSlice';
 import { setToken } from 'Src/utils';
 import request from 'Src/utils/request';
 import './index.scss';
@@ -54,7 +54,7 @@ const Login = (props: any) => {
       setOpen(true);
       if (code === 0) {
         setMessage('登录成功');
-        dispatch(setUser(data?.user));
+        // dispatch(setUser(data?.user));
         setToken(data?.token);
         props.history.push('/');
       } else {
