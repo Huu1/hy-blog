@@ -1,36 +1,40 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ArticleCard from 'Src/components/ArticleCard';
 // import PageLoading from 'Src/components/pageLoading';
 import { selectAllArticle, fetchArticle, resetArticle } from 'Src/store/feature/articleSlice';
 import { IArticle } from 'Src/utils/type';
-import { uid } from 'Src/config/user';
 import ScrollBar from 'Src/router/Layout/ScrollBar';
 import { getAppdata } from 'Src/store/feature/appSlice';
 import Box from '@material-ui/core/Box/Box';
 import Skeleton from '@mui/material/Skeleton';
 import './index.scss';
 import { withRouter } from 'react-router';
+import { ActionType, paramReducer } from './reducer';
 
 function Home() {
   const dispatch = useDispatch();
+
+  const firstRef = useRef<boolean>(false);
 
   const [loading, setLoading] = useState(false);
 
   // 文章缓存
   const { data: articleList, status, total } = useSelector(selectAllArticle);
 
-  // 页码
-  const [current, setCurrent] = useState(1);
-
   // 分类列表
   const { tagList } = useSelector(getAppdata);
-  const [currentTag, setCurrentTag] = useState(tagList[0].tagId);
+
+  const [state, paramDispatch] = useReducer(paramReducer, {
+    current: 1,
+    currentTag: tagList[0].tagId,
+  });
+  const { current, currentTag } = state;
 
   // 获取文章
   const fetchData = useCallback(
     (cb) => {
-      dispatch(fetchArticle({ current, uid, tagId: currentTag, cb }));
+      dispatch(fetchArticle({ current, tagId: currentTag, cb, pageSize: 2 }));
     },
     [current, currentTag, dispatch],
   );
@@ -38,12 +42,18 @@ function Home() {
   // 获取文章  loading闪烁
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => {
-      fetchData(() => {
-        setLoading(false);
-      });
-    }, 300);
-
+    let timer: NodeJS.Timeout;
+    const hideLoading = () => {
+      setLoading(false);
+    };
+    if (firstRef.current) {
+      fetchData(hideLoading);
+      firstRef.current = true;
+    } else {
+      timer = setTimeout(() => {
+        fetchData(hideLoading);
+      }, 500);
+    }
     return () => {
       // eslint-disable-next-line no-unused-expressions
       timer && clearTimeout(timer);
@@ -51,16 +61,27 @@ function Home() {
   }, [dispatch, fetchData]);
 
   const getMore = () => {
-    setCurrent(current + 1);
+    paramDispatch({
+      type: ActionType.CHANGE_CURRENT,
+      payload: current + 1,
+    });
   };
 
   const onTagChange = (tagId: string) => {
+    paramDispatch({
+      type: ActionType.CHANGE_ALL,
+      payload: {
+        current: 1,
+        currentTag: tagId,
+      },
+    });
     dispatch(resetArticle());
-    setCurrent(1);
-    setCurrentTag(tagId);
   };
 
   const load = () => {
+    if (status === 'failed') {
+      return <div>服务器开了小差~</div>;
+    }
     if (loading) {
       return (
         <Box sx={{ width: '100%' }}>
@@ -70,13 +91,10 @@ function Home() {
         </Box>
       );
     }
-    if (status === 'failed') {
-      return <div>服务器开了小差~</div>;
-    }
-    if (total === 0) {
+    if (!loading && total === 0) {
       return <span style={{ color: '#5a656b' }}>空空如也~</span>;
     }
-    if (articleList && articleList?.length === total) {
+    if (!loading && articleList && articleList?.length === total) {
       return <span style={{ color: '#5a656b' }}>我是有底线的~</span>;
     }
     return (

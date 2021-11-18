@@ -1,5 +1,6 @@
 /* eslint-disable unicorn/consistent-function-scoping */
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { fetchPost } from 'Src/api/article';
 import request from 'Src/utils/request';
 import { IArticle } from 'Src/utils/type';
 
@@ -21,11 +22,8 @@ const initialState: IState = {
 export const fetchArticle = createAsyncThunk(
   'posts/fetchArticle',
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  async ({ current, uid, tagId, cb = () => {} }: any) => {
-    // eslint-disable-next-line no-shadow
-    const getUrl = (current: number, uid: string): string =>
-      `article/queryAllPublish?uid=${uid}&pageSize=2&current=${current}&tagId=${tagId}`;
-    const response: any = await request.get(getUrl(current, uid));
+  async ({ current, tagId, cb = () => {}, pageSize }: any) => {
+    const response: any = await fetchPost(current, tagId, pageSize);
     cb();
     if (response.code === 0) {
       return response.data;
