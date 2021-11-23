@@ -5,6 +5,9 @@ const ScrollBar = (props: { onTagChange: (value: string) => void; tagList: any[]
   const { onTagChange, tagList = [], currentTag } = props;
   return (
     <div className='scrollBar-wrap'>
+      <span onClick={() => onTagChange('')} className={`${!currentTag ? 'checked' : ''} item`}>
+        全部
+      </span>
       {tagList.map((tag: any) => {
         return (
           <span

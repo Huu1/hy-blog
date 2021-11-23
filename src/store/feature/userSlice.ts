@@ -36,10 +36,10 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    // setUser(state) {
-    //   // eslint-disable-next-line no-param-reassign
-    //   state.data = [];
-    // },
+    setUser(state, action) {
+      // eslint-disable-next-line no-param-reassign
+      state.user = action.payload;
+    },
   },
   extraReducers(builder) {
     builder
@@ -62,7 +62,7 @@ const userSlice = createSlice({
   },
 });
 
-// export const { resetArticle } = articleSlice.actions;
+export const { setUser } = userSlice.actions;
 
 export default userSlice.reducer;
 

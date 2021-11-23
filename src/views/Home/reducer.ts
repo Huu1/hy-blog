@@ -8,9 +8,9 @@ export function paramReducer(state: any, action: any) {
   const { type, payload } = action;
   switch (type) {
     case 'CHANGE_CURRENT':
-      return { ...state, current: payload };
+      return { ...state, current: state.current + 1 };
     case 'CHANGE_TAG':
-      return { ...state, currentTag: payload };
+      return { ...state, tagId: payload };
     case 'CHANGE_ALL':
       return { ...payload };
     default:

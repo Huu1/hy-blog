@@ -6,13 +6,15 @@ interface IState {
   status: string;
   error: string | undefined;
   sideDrawerVisible: boolean;
+  loginVisible: boolean;
 }
 
 const initialState: IState = {
-  appData: null,
-  sideDrawerVisible: false,
   status: 'idel',
   error: undefined,
+  appData: null,
+  sideDrawerVisible: false,
+  loginVisible: true,
 };
 
 export const fetchConfig = createAsyncThunk(
@@ -39,6 +41,10 @@ const appSlice = createSlice({
       // eslint-disable-next-line no-param-reassign
       state.sideDrawerVisible = !state.sideDrawerVisible;
     },
+    toggleLoginVisible(state) {
+      // eslint-disable-next-line no-param-reassign
+      state.loginVisible = !state.loginVisible;
+    },
   },
   extraReducers(builder) {
     builder
@@ -61,7 +67,7 @@ const appSlice = createSlice({
   },
 });
 
-export const { setAppData, toggleSideDrawerVisible } = appSlice.actions;
+export const { setAppData, toggleSideDrawerVisible, toggleLoginVisible } = appSlice.actions;
 
 export default appSlice.reducer;
 
@@ -70,3 +76,6 @@ export const getAppdata = (state: any) => state.app.appData;
 
 // 获取侧边栏状态
 export const getSideDrawerVisible = (state: any) => state.app.sideDrawerVisible;
+
+// 获取侧边栏状态
+export const getLoginVisible = (state: any) => state.app.loginVisible;

@@ -13,7 +13,7 @@ import { withRouter } from 'react-router';
 import { useDispatch } from 'react-redux';
 import { toggleSideDrawerVisible } from 'Src/store/feature/appSlice';
 import MenuIcon from '@mui/icons-material/Menu';
-import ArrowBack from '@mui/icons-material/ArrowBackTwoTone';
+import Home from '@mui/icons-material/Home';
 import { HideOnScroll, Props } from 'Src/utils/shared';
 
 function ScrollTop(props: Props) {
@@ -61,7 +61,7 @@ const ToolBar = (props: { onClickHandle: () => void; isHome: boolean }) => {
         aria-label='open drawer'
         sx={{ mr: 2 }}
       >
-        {isHome ? <MenuIcon /> : <ArrowBack />}
+        {isHome ? <MenuIcon /> : <Home />}
       </IconButton>
       <Typography
         variant='h6'
@@ -82,7 +82,7 @@ const MainWrap = (props: Props | any) => {
   } = props;
 
   const isHome = React.useMemo(() => {
-    return !pathname.includes('article');
+    return pathname.includes('home');
   }, [pathname]);
 
   const dispatch = useDispatch();

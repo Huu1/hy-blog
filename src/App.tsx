@@ -1,5 +1,6 @@
 import React, { Suspense } from 'react';
 import 'dayjs/locale/zh-cn';
+import { SnackbarProvider } from 'notistack';
 import { StartLoading } from './components/StartLoading';
 import { getToken } from './utils';
 import store from './store';
@@ -27,7 +28,9 @@ const Router = React.lazy(() => {
 function App() {
   return (
     <Suspense fallback={<StartLoading />}>
-      <Router />
+      <SnackbarProvider maxSnack={3}>
+        <Router />
+      </SnackbarProvider>
     </Suspense>
   );
 }

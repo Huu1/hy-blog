@@ -16,13 +16,12 @@ function ArticleCard({ article, history }: any) {
     history.push(`/article/${article.articleId}`);
   };
   return (
-    <div className='article-wrap'>
-      <div className='card'>
+    <div className='article-card-wrap'>
+      {/* <div className='card'>
         <div className='card-header'>
           <p className='category-tag' style={{ background: article.tag.color }}>
             {article.tag.title}
           </p>
-          <img className='header-img' src='/api/public' alt='code' />
         </div>
         <div className='card-body'>
           {article?.label?.map((i: any) => {
@@ -34,16 +33,37 @@ function ArticleCard({ article, history }: any) {
           <p className='blog-description'>{article?.brief}</p>
           <div className='card-footer flex'>
             <span className='time'>{dayjs(article.createTime).fromNow()}</span>
-            {/* <span className='right-action'>
-                <i className='icon iconfont icon-dianzan' onClick={likeAction} />
-                <span>12</span>
-              </span>
-              <span>
-                <i className='icon iconfont icon-pinglun1' />
-                <span>0</span>
-              </span> */}
           </div>
         </div>
+      </div> */}
+      <div className='header'>
+        <span className='time'>{dayjs(article.createTime).fromNow()}</span>
+      </div>
+      <div className='brief'>
+        <p className='blog-description'>{article?.brief}</p>
+      </div>
+      <div className='meta'>
+        {article?.meta.map((item: any) => {
+          if (item.type === 0) {
+            return <img style={{ width: '4rem', height: '4rem' }} src={`http://localhost:3000/${item.file}`} alt='' />;
+          }
+          if (item.type === 1) {
+            return <img style={{ width: '4rem', height: '4rem' }} src={`http://localhost:3000/${item.file}`} alt='' />;
+          }
+          if (item.type === 2) {
+            // eslint-disable-next-line jsx-a11y/media-has-caption
+            return (
+              // eslint-disable-next-line jsx-a11y/media-has-caption
+              <video
+                style={{ objectFit: 'fill' }}
+                width='100%'
+                height='300px'
+                src={`http://localhost:3000/${item.file}`}
+                controls
+              />
+            );
+          }
+        })}
       </div>
     </div>
   );

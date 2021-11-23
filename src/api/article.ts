@@ -5,6 +5,6 @@ export const doLike = (data: { type: 1 | 2; articleId?: string; commentId?: stri
   return request.post('/like', data);
 };
 
-export const fetchPost = (current: string, tagId: string, pageSize = 4) => {
+export const fetchPost = (current: number, tagId: string, pageSize: number) => {
   return request.get(`article/queryAllPublish?uid=${uid}&pageSize=${pageSize}&current=${current}&tagId=${tagId}`);
 };

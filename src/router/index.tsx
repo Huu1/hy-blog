@@ -1,11 +1,16 @@
 import React from 'react';
 import { HashRouter, Route, Switch, Redirect } from 'react-router-dom';
 import Main from 'Src/router/Layout/Main';
-import Login from 'Src/router/Login';
+import Login from 'Src/components/Dialog';
 import { getToken } from 'Src/utils';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import { useDispatch, useSelector } from 'react-redux';
-import { getSideDrawerVisible, toggleSideDrawerVisible } from 'Src/store/feature/appSlice';
+import {
+  getLoginVisible,
+  getSideDrawerVisible,
+  toggleLoginVisible,
+  toggleSideDrawerVisible,
+} from 'Src/store/feature/appSlice';
 import MainWrap from './Layout/Main/main';
 import AppMenu from './Layout/SideBar';
 
@@ -13,14 +18,13 @@ const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigato
 
 const Content = () => {
   const drawerVisible = useSelector(getSideDrawerVisible);
+  const loginVisible = useSelector(getLoginVisible);
   const dispatch = useDispatch();
   return (
     <div className='app flex-column' style={{ minHeight: '100vh' }}>
       <MainWrap>
         <Main />
       </MainWrap>
-
-      {/* routerList */}
       <SwipeableDrawer
         disableBackdropTransition={!iOS}
         disableDiscovery={iOS}
@@ -31,6 +35,7 @@ const Content = () => {
       >
         <AppMenu />
       </SwipeableDrawer>
+      <Login open={loginVisible} onCloseHandle={() => dispatch(toggleLoginVisible())} />
     </div>
   );
 };

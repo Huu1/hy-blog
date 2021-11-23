@@ -1,8 +1,6 @@
-import React, { useCallback, useEffect, useReducer, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import ArticleCard from 'Src/components/ArticleCard';
-// import PageLoading from 'Src/components/pageLoading';
-import { selectAllArticle, fetchArticle, resetArticle } from 'Src/store/feature/articleSlice';
 import { IArticle } from 'Src/utils/type';
 import ScrollBar from 'Src/router/Layout/ScrollBar';
 import { getAppdata } from 'Src/store/feature/appSlice';
@@ -11,78 +9,76 @@ import Skeleton from '@mui/material/Skeleton';
 import './index.scss';
 import { withRouter } from 'react-router';
 import { ActionType, paramReducer } from './reducer';
+import { useFetchArticle } from './hooks';
+
+const PAGE_SIZE = 4;
 
 function Home() {
-  const dispatch = useDispatch();
-
   const firstRef = useRef<boolean>(false);
 
   const [loading, setLoading] = useState(false);
 
-  // 文章缓存
-  const { data: articleList, status, total } = useSelector(selectAllArticle);
+  const [realData, setRealData] = useState<IArticle[]>([]);
 
   // 分类列表
   const { tagList } = useSelector(getAppdata);
 
-  const [state, paramDispatch] = useReducer(paramReducer, {
+  const [param, paramDispatch] = useReducer(paramReducer, {
     current: 1,
-    currentTag: tagList[0].tagId,
+    tagId: '',
   });
-  const { current, currentTag } = state;
 
-  // 获取文章
-  const fetchData = useCallback(
-    (cb) => {
-      dispatch(fetchArticle({ current, tagId: currentTag, cb, pageSize: 2 }));
-    },
-    [current, currentTag, dispatch],
-  );
+  const { state, setData: setParam } = useFetchArticle({ tagId: param.tagId, current: param.current }, PAGE_SIZE);
+  const { data, isError, isLoading } = state;
 
-  // 获取文章  loading闪烁
+  const total = useMemo(() => data?.total || 0, [data]);
+
   useEffect(() => {
+    let timer: NodeJS.Timer | null;
     setLoading(true);
-    let timer: NodeJS.Timeout;
-    const hideLoading = () => {
-      setLoading(false);
-    };
-    if (firstRef.current) {
-      fetchData(hideLoading);
-      firstRef.current = true;
-    } else {
-      timer = setTimeout(() => {
-        fetchData(hideLoading);
-      }, 500);
+    if (data.list) {
+      if (firstRef.current) {
+        setRealData((p: IArticle[]) => [...p, ...data.list]);
+        firstRef.current = true;
+        setLoading(false);
+      } else {
+        timer = setTimeout(() => {
+          setRealData((p: IArticle[]) => [...p, ...data.list]);
+          setLoading(false);
+        }, 150);
+      }
     }
     return () => {
-      // eslint-disable-next-line no-unused-expressions
-      timer && clearTimeout(timer);
+      if (timer) clearTimeout(timer);
     };
-  }, [dispatch, fetchData]);
+  }, [data]);
 
   const getMore = () => {
+    setLoading(true);
     paramDispatch({
       type: ActionType.CHANGE_CURRENT,
-      payload: current + 1,
     });
+    setParam({ ...param, current: param.current + 1 });
   };
 
   const onTagChange = (tagId: string) => {
+    setLoading(true);
     paramDispatch({
       type: ActionType.CHANGE_ALL,
       payload: {
         current: 1,
-        currentTag: tagId,
+        tagId,
       },
     });
-    dispatch(resetArticle());
+    setRealData([]);
+    setParam({ ...param, current: 1, tagId });
   };
 
   const load = () => {
-    if (status === 'failed') {
+    if (isError) {
       return <div>服务器开了小差~</div>;
     }
-    if (loading) {
+    if (isLoading || loading) {
       return (
         <Box sx={{ width: '100%' }}>
           <Skeleton />
@@ -91,10 +87,10 @@ function Home() {
         </Box>
       );
     }
-    if (!loading && total === 0) {
+    if (!loading && !isLoading && total === 0) {
       return <span style={{ color: '#5a656b' }}>空空如也~</span>;
     }
-    if (!loading && articleList && articleList?.length === total) {
+    if (!loading && !isLoading && realData && realData?.length === total) {
       return <span style={{ color: '#5a656b' }}>我是有底线的~</span>;
     }
     return (
@@ -106,9 +102,9 @@ function Home() {
 
   return (
     <>
-      <ScrollBar onTagChange={onTagChange} tagList={tagList} currentTag={currentTag} />
+      <ScrollBar onTagChange={onTagChange} tagList={tagList} currentTag={param.tagId} />
       <div className='home'>
-        {articleList?.map((article: IArticle) => {
+        {realData.map((article: IArticle) => {
           return <ArticleCard key={article.articleId} article={article} />;
         })}
         <div style={{ textAlign: 'center', marginTop: '2rem' }}>{load()}</div>

@@ -60,8 +60,8 @@ const AppMenu = (props: any) => {
   };
   return (
     <Box sx={{ width: '100%', height: '100%', maxWidth: 360, bgcolor: 'rgb(5, 30, 52)', padding: '.5rem' }}>
-      <UserInfo />
-      <Divider />
+      {/* <UserInfo />
+      <Divider /> */}
       <List>
         {menuList.map((menu: IMenu) => {
           return (

@@ -8,7 +8,8 @@ import request from 'Src/utils/request';
 import { IArticle } from 'Src/utils/type';
 import './index.scss';
 import confetti from 'canvas-confetti';
-import SwipeableEdgeDrawer from './Comment';
+import ReplayList from 'Src/components/ReplayList';
+import { useAuth } from 'Src/hooks/user';
 
 dayjs.locale('zh-cn');
 dayjs.extend(relativeTime);
@@ -74,7 +75,7 @@ const Content = React.memo((props: { data: string | undefined }) => {
     <main className='content'>
       <div className='article-content'>
         <ArticleContent value={props.data} />
-        <Divider style={{ margin: '80px 0' }}>end</Divider>
+        <Divider style={{ margin: '60px 0' }} />
       </div>
     </main>
   );
@@ -88,6 +89,8 @@ const Comment = React.memo(
     onDrawerDataConfirm: (data: string) => void;
   }) => {
     const { onVisibleHandle, drawerVisible, onDrawerDataConfirm } = props;
+
+    const user = useAuth();
 
     const replayRef = useRef<any>(null);
 
@@ -138,7 +141,7 @@ const Comment = React.memo(
             <textarea placeholder='请输入...' ref={replayRef} rows={3} name='' id='' />
             <div className='text-right'>
               <Button size='small' variant='outlined' onClick={confirmData}>
-                发布
+                回复
               </Button>
             </div>
           </div>
@@ -201,39 +204,39 @@ function ArticlePage(props: any) {
     console.log(replayParam);
   };
 
-  // useEffect(() => {
-  //   const fetch = async () => {
-  //     try {
-  //       const res: any = await request.get(`comment/${params.id}`);
-  //       const { code, data, msg } = res;
-  //       if (code === 0) {
-  //         setTimeout(() => {
-  //           setComment(data);
-  //         }, 100);
-  //       } else {
-  //         console.warn(msg);
-  //       }
-  //     } catch (error) {
-  //       console.error(error);
-  //     }
-  //   };
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        const res: any = await request.get(`comment/${params.id}`);
+        const { code, data, msg } = res;
+        if (code === 0) {
+          setTimeout(() => {
+            setComment(data);
+          }, 100);
+        } else {
+          console.warn(msg);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
 
-  //   fetch();
-  // }, [params.id]);
+    fetch();
+  }, [params.id]);
 
   return (
     <section className='article-wrap'>
       <Header data={article} />
       <Content data={article?.content.content} />
-      {/* <CommentList data={commentList} onCommentHandle={onCommentHandle} /> */}
-      <SwipeableEdgeDrawer articleId={params.id} />
-      {/* {trigger && (
+      <ReplayList data={commentList} onCommentHandle={onCommentHandle} />
+      {/* <SwipeableEdgeDrawer articleId={params.id} /> */}
+      {trigger && (
         <Comment
           onDrawerDataConfirm={onDrawerDataConfirm}
           onVisibleHandle={onVisibleHandle}
           drawerVisible={drawerVisible}
         />
-      )} */}
+      )}
     </section>
   );
 }

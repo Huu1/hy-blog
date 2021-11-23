@@ -132,10 +132,11 @@ export default function SwipeableEdgeDrawer(props: any) {
             <div style={{ padding: '1rem' }}>
               <Skeleton />
               <Skeleton animation='wave' />
+              <Skeleton animation='wave' />
               <Skeleton animation={false} />
             </div>
           )}
-          {commentList && commentList.length === 0 && (
+          {!loading && commentList && commentList.length === 0 && (
             <div style={{ textAlign: 'center', marginTop: '1rem' }}>暂无评论</div>
           )}
           <CommentList data={commentList} onCommentHandle={onCommentHandle} />
