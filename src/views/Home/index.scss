@@ -1,7 +1,21 @@
-.home {
-  margin-top: 1rem;
-  margin-bottom: 2rem;
-  @include page-inner();
+.home-wrap {
+  // padding: 1rem 0;
+  // box-sizing: border-box;
+}
+.homePage {
+  min-height: calc(100vh - 40px - 36.7px);
+  overflow: hidden;
+  padding: 1rem;
+}
+
+.MuiTabs-indicator {
+  display: none;
+}
+
+.info-margin {
+  text-align: center;
+  margin: 2rem 0;
+  color: #5a656b;
 }
 .loadMore {
   border: 1px solid #aaa;
