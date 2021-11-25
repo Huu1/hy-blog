@@ -12,6 +12,7 @@ import Typography from '@mui/material/Typography';
 import SwipeableViews from 'react-swipeable-views';
 import { useTheme } from '@mui/material/styles';
 import { Tab, Tabs } from '@mui/material';
+import LazyLoad from 'react-lazyload';
 import { ActionType, paramReducer } from './reducer';
 import { useFetchArticle } from './hooks';
 
@@ -53,7 +54,7 @@ function TabPanel(props: TabPanelProps) {
 const HomePage = (props: { tagId: string }) => {
   const { tagId } = props;
   const firstRef = useRef<boolean>(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const [realData, setRealData] = useState<IArticle[]>([]);
 
@@ -99,32 +100,39 @@ const HomePage = (props: { tagId: string }) => {
     if (isError) {
       return <div>服务器开了小差~</div>;
     }
+    if (!loading && !isLoading && total === 0) {
+      return <div className='info-margin'>空空如也~</div>;
+    }
     if (isLoading || loading) {
       return (
         <Box sx={{ width: '100%' }}>
           <Skeleton />
+          <Skeleton animation={false} />
           <Skeleton animation='wave' />
           <Skeleton animation={false} />
         </Box>
       );
     }
-    if (!loading && !isLoading && total === 0) {
-      return <div className='info-margin'>空空如也~</div>;
-    }
     if (!loading && !isLoading && realData && realData?.length === total) {
       return <div className='info-margin'>我是有底线的~</div>;
     }
     return (
-      <div className='info-margin' onClick={getMore}>
-        <span className='loadMore'>获取更多</span>
-      </div>
+      <LazyLoad height={200} offset={100}>
+        <div className='info-margin' onClick={getMore}>
+          <span className='loadMore'>获取更多</span>
+        </div>
+      </LazyLoad>
     );
   };
 
   return (
     <div className='homePage'>
       {realData.map((article: IArticle) => {
-        return <ArticleCard key={article.articleId} article={article} />;
+        return (
+          <LazyLoad height={200} key={article.articleId} offset={100}>
+            <ArticleCard article={article} />
+          </LazyLoad>
+        );
       })}
       <>{load()}</>
     </div>
@@ -166,7 +174,7 @@ function Home() {
         textColor='inherit'
         variant='scrollable'
         aria-label='full width tabs example'
-        style={{ minHeight: '20px', position: 'sticky', top: 0, zIndex: 99, background: 'white' }}
+        style={{ minHeight: '20px', position: 'sticky', top: 0, zIndex: 9, background: 'white' }}
       >
         {tagList.map((tag: any, index: number) => {
           return (

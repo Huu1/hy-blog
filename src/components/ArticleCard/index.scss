@@ -24,19 +24,19 @@ $cat-psychology: #e85808;
     height: 11rem;
     width: 100%;
   }
-  .category-tag {
-    font-size: 0.8rem;
-    font-weight: bold;
-    color: white;
-    background: red;
-    padding: 0.2rem 1rem 0.2rem 0.7rem;
-    text-transform: uppercase;
-    position: absolute;
-    z-index: 1;
-    top: 1rem;
-    right: 0;
-    border-radius: 2rem 0 0 2rem;
-  }
+  // .category-tag {
+  //   font-size: 0.8rem;
+  //   font-weight: bold;
+  //   color: white;
+  //   background: red;
+  //   padding: 0.2rem 1rem 0.2rem 0.7rem;
+  //   text-transform: uppercase;
+  //   position: absolute;
+  //   z-index: 1;
+  //   top: 1rem;
+  //   right: 0;
+  //   border-radius: 2rem 0 0 2rem;
+  // }
   /*categorys*/
   .popular {
     background: $cat-popular;
@@ -54,18 +54,19 @@ $cat-psychology: #e85808;
   }
   .bog-title {
     line-height: 1.5rem;
-    margin: 1.2rem 0 0.8rem;
+    margin: 1.2rem 0;
     font-size: 1.3rem;
     font-weight: bold;
   }
   .blog-description {
     color: $color-content-secondary;
     font-size: 1.1rem;
+    margin: 1rem 0;
   }
 
   .card-footer {
     display: flex;
-    margin-top: 2rem;
+    margin-top: 1rem;
     align-items: center;
     color: $color-content-secondary;
     .right-action {

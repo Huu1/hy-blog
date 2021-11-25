@@ -15,6 +15,7 @@ import { toggleSideDrawerVisible } from 'Src/store/feature/appSlice';
 import MenuIcon from '@mui/icons-material/Menu';
 import Home from '@mui/icons-material/Home';
 import { HideOnScroll, Props } from 'Src/utils/shared';
+import SearchBox from 'Src/components/SearchBox';
 
 function ScrollTop(props: Props) {
   const { children, window } = props;
@@ -52,24 +53,30 @@ const ToolBar = (props: { onClickHandle: () => void; isHome: boolean }) => {
     onClickHandle();
   };
   return (
-    <Toolbar variant='dense' sx={{ mr: 2, minHeight: '38px', bgcolor: '#fff', width: '100%' }}>
-      <IconButton
-        onClick={onTypeClickHandle}
-        size='medium'
-        edge='start'
-        color={`${isHome ? 'inherit' : 'default'}`}
-        aria-label='open drawer'
-        sx={{ mr: 2 }}
-      >
-        {isHome ? <MenuIcon /> : <Home />}
-      </IconButton>
-      <Typography
-        variant='h6'
-        component='div'
-        sx={{ mr: 2, fontSize: '1.1rem', color: `${isHome ? 'inherit' : 'black'}` }}
-      >
-        🎉🎉 Blog
-      </Typography>
+    <Toolbar variant='dense' sx={{ mr: 2, minHeight: '38px', bgcolor: '#fff', width: '100%' }} className='flex'>
+      <div className='flex column-center'>
+        <IconButton
+          onClick={onTypeClickHandle}
+          size='medium'
+          edge='start'
+          color={`${isHome ? 'inherit' : 'default'}`}
+          aria-label='open drawer'
+          sx={{ mr: 2 }}
+        >
+          {isHome ? <MenuIcon /> : <Home />}
+        </IconButton>
+        <Typography
+          variant='h6'
+          component='div'
+          sx={{ mr: 2, fontSize: '1.1rem', color: `${isHome ? 'inherit' : 'black'}` }}
+        >
+          🎉🎉 Blog
+        </Typography>
+      </div>
+
+      <div style={{ marginLeft: 'auto' }}>
+        <SearchBox />
+      </div>
     </Toolbar>
   );
 };
